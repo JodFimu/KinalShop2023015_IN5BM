@@ -1,5 +1,6 @@
 package org.josefigueroa.controller;
 
+import static java.lang.Double.parseDouble;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.josefigueroa.bean.Productos;
 import org.josefigueroa.bean.Proveedores;
@@ -67,7 +69,7 @@ public class ProductosController implements Initializable {
     private ImageView imgInicio;
 
     @FXML
-    private TableView tblCliente;
+    private TableView tblProductos;
 
     @FXML
     private TableColumn colCodProd;
@@ -126,8 +128,8 @@ public class ProductosController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cargarDatos();
-        cbxTipoProd.setItems(listarProductos);
-        cbxProv.setItems(listarProductos);
+        cbxTipoProd.setItems(getTipoProducto());
+        cbxProv.setItems(getProveedores());
         cbxTipoProd.setDisable(false);
         cbxProv.setDisable(false);
     }    
@@ -252,5 +254,73 @@ public class ProductosController implements Initializable {
     
     public void setEscenarioPrincipal(Main escenarioPrincipal) {
         this.escenarioPrincipal = escenarioPrincipal;
+    }
+    
+    public void agregarProductos() {
+        switch (tipoOperaciones) {
+            case NULL:
+                activarControles();
+                btnEliminar.setText("Cancelar");
+                btnAgregar.setText("Guardar");
+                imgAgregar.setImage(new Image("/org/josefigueroa/images/guardar.png"));
+                imgEliminar.setImage(new Image("/org/josefigueroa/images/cancelar.png"));
+                txtCod.setEditable(false);
+                btnReporte.setDisable(true);
+                btnEditar.setDisable(true);
+                btnInicio.setDisable(true);
+                tipoOperaciones = operaciones.ACTUALIZAR;
+                break;
+            case ACTUALIZAR:
+                guardarProductos();
+                cargarDatos();
+                desactivarControles();
+                limpiarControles();
+                btnAgregar.setText("Agregar");
+                btnEliminar.setText("Eliminar");
+                imgAgregar.setImage(new Image("/org/josefigueroa/images/agregar.png"));
+                imgEliminar.setImage(new Image("/org/josefigueroa/images/eliminar.png"));  
+                btnInicio.setDisable(false);
+                txtCod.setEditable(true);
+                btnReporte.setDisable(false);
+                btnEditar.setDisable(false);
+                tipoOperaciones = operaciones.NULL;
+                break;
+        }
+    }
+    
+    public void guardarProductos(){
+        Productos registro = new Productos();
+        registro.setCodigoProducto(txtCod.getText());
+        registro.setProveedor(((Proveedores) cbxProv.getSelectionModel().getSelectedItem()).getCodigoProveedor());
+        registro.setTipoProducto(((TipoProducto) cbxTipoProd.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
+        registro.setDescripcionProducto(txtDescr.getText());
+        registro.setPrecioUnitario(Double.parseDouble(txtPrecUn.getText()));
+        registro.setPrecioDocena(Double.parseDouble(txtPrecDoc.getText()));
+        registro.setPrecioMayor(Double.parseDouble(txtMayo.getText()));
+        registro.setImagenProducto(txtImg.getText());
+        registro.setExistencia(Integer.parseInt(txtExist.getText()));
+        
+        try{
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarTipoProducto(?,?,?,?,?,?,?,?,?)}");
+            procedimiento.setString(1, registro.getCodigoProducto());
+            procedimiento.setString(2, registro.getDescripcionProducto());
+            procedimiento.setDouble(3, registro.getPrecioUnitario());
+            procedimiento.setDouble(4, registro.getPrecioDocena());
+            procedimiento.setDouble(5, registro.getPrecioMayor());
+            procedimiento.setString(6, registro.getImagenProducto());
+            procedimiento.setInt(7, registro.getExistencia());
+            procedimiento.setInt(8, registro.getTipoProducto());
+            procedimiento.setInt(9, registro.getProveedor());
+            
+            procedimiento.execute();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void seleccionarTupla() {
+        txtCod.setText(String.valueOf(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+        txtDescr.setText(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getDescripcionProducto());
+        
     }
 }

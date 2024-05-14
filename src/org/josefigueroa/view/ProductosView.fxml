@@ -79,7 +79,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <TableView fx:id="tblCliente" layoutX="270.0" layoutY="248.0" prefHeight="369.0" prefWidth="766.0" stylesheets="@../resource/KinalShopCSS.css">
+      <TableView fx:id="tblProductos" layoutX="270.0" layoutY="248.0" prefHeight="369.0" prefWidth="766.0" stylesheets="@../resource/KinalShopCSS.css">
          <columns>
             <TableColumn fx:id="colCodProd" minWidth="85.11" prefWidth="85.11" text="codigoProducto" />
             <TableColumn fx:id="colDescProd" minWidth="85.11" prefWidth="85.11" text="descripcionProducto" />

@@ -100,7 +100,7 @@ public class Productos {
     public void setProveedor(int proveedor) {
         this.proveedor = proveedor;
     }
-    
-    
-    
+
+
+ 
 }
