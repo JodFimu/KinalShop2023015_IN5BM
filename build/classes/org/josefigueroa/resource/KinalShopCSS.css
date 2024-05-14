@@ -1,0 +1,21 @@
+.menubar{
+    -fx-background-color: transparent;
+    -fx-opacity: 0.5;
+    -fx-border-width: 2.0;
+}
+
+.Button:hover{
+    -fx-opacity: 1;
+    -fx-background-color: #D04848;
+    -fx-text-fill: #ffffff;
+}
+
+.table-view.column-header,
+.table-view.column-background.filler{
+    -fx-background-color: #FDE767;
+}
+
+.table-row-cell:selected{
+    -fx-background-color:  #6895D2;
+}
+
