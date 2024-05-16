@@ -32,7 +32,7 @@ public class TipoProducto {
 
     @Override
     public String toString() {
-        return codigoTipoProducto + "|" + descripcion ;
+        return codigoTipoProducto + "| " + descripcion ;
     }
     
     

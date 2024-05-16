@@ -2,16 +2,6 @@ package org.josefigueroa.bean;
 
 
 public class Proveedores {
-    /*
-    codigoProveedor int auto_increment,
-    NITProveedor varchar(10),
-    nombresProveedor varchar(60),
-    apellidosProveedor varchar(60),
-    direccionProveedor varchar(150),
-    razonSocial varchar(60),
-    contactoPrincipal varchar(100),
-    paginaWeb varchar(50)
-    */
     
     private int codigoProveedor;
     private String NITProveedor;
@@ -100,5 +90,8 @@ public class Proveedores {
         this.contactoPrincipal = contactoPrincipal;
     }
     
-    
+    @Override
+    public String toString() {
+        return codigoProveedor + "| " + nombresProveedor ;
+    }
 }

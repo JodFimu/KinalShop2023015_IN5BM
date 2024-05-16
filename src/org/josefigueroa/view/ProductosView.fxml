@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="1066.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.josefigueroa.controller.ProductosController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="1066.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.josefigueroa.controller.ProductosController">
    <children>
-      <ImageView fitHeight="700.0" fitWidth="1206.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="678.0" fitWidth="1207.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/fondoViews.png" />
          </image>
@@ -32,7 +32,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button fx:id="btnAgregar" mnemonicParsing="false" prefHeight="78.0" prefWidth="202.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Agregar" textAlignment="RIGHT">
+            <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#agregarProductos" prefHeight="78.0" prefWidth="202.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Agregar" textAlignment="RIGHT">
                <graphic>
                   <ImageView fx:id="imgAgregar" fitHeight="56.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -41,7 +41,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnEliminar" mnemonicParsing="false" prefHeight="79.0" prefWidth="200.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Eliminar" GridPane.rowIndex="1">
+            <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#eliminarProveedores" prefHeight="79.0" prefWidth="200.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Eliminar" GridPane.rowIndex="1">
                <graphic>
                   <ImageView fx:id="imgEliminar" fitHeight="56.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -50,7 +50,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnReporte" mnemonicParsing="false" prefHeight="86.0" prefWidth="200.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Reporte" GridPane.rowIndex="3">
+            <Button fx:id="btnReporte" mnemonicParsing="false" onAction="#reporte" prefHeight="86.0" prefWidth="200.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Reporte" GridPane.rowIndex="3">
                <graphic>
                   <ImageView fx:id="imgReporte" fitHeight="56.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -59,7 +59,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnEditar" mnemonicParsing="false" prefHeight="73.0" prefWidth="254.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Editar" GridPane.rowIndex="2">
+            <Button fx:id="btnEditar" mnemonicParsing="false" onAction="#editar" onMouseClicked="#seleccionarTupla" prefHeight="73.0" prefWidth="254.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Editar" GridPane.rowIndex="2">
                <graphic>
                   <ImageView fx:id="imgEditar" fitHeight="56.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -70,7 +70,7 @@
             </Button>
          </children>
       </GridPane>
-      <Button fx:id="btnInicio" layoutX="91.0" layoutY="599.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="101.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css">
+      <Button fx:id="btnInicio" layoutX="91.0" layoutY="599.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="37.0" prefWidth="101.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css">
          <graphic>
             <ImageView fx:id="imgInicio" fitHeight="37.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -79,7 +79,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <TableView fx:id="tblProductos" layoutX="270.0" layoutY="248.0" prefHeight="369.0" prefWidth="766.0" stylesheets="@../resource/KinalShopCSS.css">
+      <TableView fx:id="tblProductos" layoutX="270.0" layoutY="248.0" onMouseClicked="#seleccionarTupla" prefHeight="369.0" prefWidth="766.0" stylesheets="@../resource/KinalShopCSS.css">
          <columns>
             <TableColumn fx:id="colCodProd" minWidth="85.11" prefWidth="85.11" text="codigoProducto" />
             <TableColumn fx:id="colDescProd" minWidth="85.11" prefWidth="85.11" text="descripcionProducto" />
@@ -117,7 +117,7 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Precio unitario" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <GridPane layoutX="553.0" layoutY="137.0">
+      <GridPane layoutX="505.0" layoutY="137.0" prefHeight="90.0" prefWidth="248.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -136,7 +136,7 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <GridPane layoutX="836.0" layoutY="137.0">
+      <GridPane layoutX="798.0" layoutY="137.0" prefHeight="90.0" prefWidth="238.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -151,8 +151,8 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de Producto" GridPane.rowIndex="1" />
             <TextField fx:id="txtExist" prefHeight="57.0" prefWidth="100.0" GridPane.columnIndex="1" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Proveedor" GridPane.rowIndex="2" />
-            <ComboBox fx:id="cbxTipoProd" prefHeight="41.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ComboBox fx:id="cbxProv" prefHeight="47.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="cbxTipoProd" prefHeight="31.0" prefWidth="141.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="cbxProv" prefHeight="31.0" prefWidth="141.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
    </children>
