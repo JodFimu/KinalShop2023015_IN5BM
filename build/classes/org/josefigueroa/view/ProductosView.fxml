@@ -41,7 +41,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#eliminarProveedores" prefHeight="79.0" prefWidth="200.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Eliminar" GridPane.rowIndex="1">
+            <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#eliminarProductos" prefHeight="79.0" prefWidth="200.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Eliminar" GridPane.rowIndex="1">
                <graphic>
                   <ImageView fx:id="imgEliminar" fitHeight="56.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
                      <image>

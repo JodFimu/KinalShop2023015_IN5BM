@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="1066.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.josefigueroa.controller.ProductosController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="1066.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.josefigueroa.controller.DetalleCompraController">
    <children>
-      <ImageView fitHeight="678.0" fitWidth="1207.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="677.0" fitWidth="1402.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/fondoViews.png" />
          </image>
@@ -32,7 +32,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#agregarProductos" prefHeight="78.0" prefWidth="202.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Agregar" textAlignment="RIGHT">
+            <Button fx:id="btnAgregar" mnemonicParsing="false" onAction="#agregarDetalleCompra" prefHeight="78.0" prefWidth="202.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Agregar" textAlignment="RIGHT">
                <graphic>
                   <ImageView fx:id="imgAgregar" fitHeight="56.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -41,7 +41,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#eliminarProductos" prefHeight="79.0" prefWidth="200.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Eliminar" GridPane.rowIndex="1">
+            <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#eliminarDetalleCompra" prefHeight="79.0" prefWidth="200.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Eliminar" GridPane.rowIndex="1">
                <graphic>
                   <ImageView fx:id="imgEliminar" fitHeight="56.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -79,17 +79,13 @@
             </ImageView>
          </graphic>
       </Button>
-      <TableView fx:id="tblProductos" layoutX="270.0" layoutY="248.0" onMouseClicked="#seleccionarTupla" prefHeight="369.0" prefWidth="766.0" stylesheets="@../resource/KinalShopCSS.css">
+      <TableView fx:id="tblDetCompra" layoutX="270.0" layoutY="248.0" onMouseClicked="#seleccionarTupla" prefHeight="369.0" prefWidth="766.0" stylesheets="@../resource/KinalShopCSS.css">
          <columns>
-            <TableColumn fx:id="colCodProd" minWidth="85.11" prefWidth="85.11" text="codigoProducto" />
-            <TableColumn fx:id="colDescProd" minWidth="85.11" prefWidth="85.11" text="descripcionProducto" />
-            <TableColumn fx:id="colPrecUnit" minWidth="85.11" prefWidth="85.11" text="precioUnitario" />
-            <TableColumn fx:id="colPrecDoc" minWidth="85.11" prefWidth="85.11" text="precioDocena" />
-            <TableColumn fx:id="colPrecMay" minWidth="85.11" prefWidth="85.11" text="precioMayor" />
-            <TableColumn fx:id="colImgProd" minWidth="85.11" prefWidth="85.11" text="imagenProducto" />
-            <TableColumn fx:id="colExist" minWidth="85.11" prefWidth="85.11" text="existencia" />
-            <TableColumn fx:id="colTipoProd" minWidth="85.11" prefWidth="85.11" text="tipoProducto" />
-            <TableColumn fx:id="colProv" minWidth="85.11" prefWidth="85.11" text="proveedor" />
+            <TableColumn fx:id="colCodDEtCompra" minWidth="153.2" prefWidth="153.2" text="codigoDetalleCompra" />
+            <TableColumn fx:id="colCostUnit" minWidth="153.2" prefWidth="153.2" text="CostoUnitario" />
+            <TableColumn fx:id="colCant" minWidth="153.2" prefWidth="153.2" text="Cantidad" />
+            <TableColumn fx:id="colCodProd" minWidth="153.2" prefWidth="153.2" text="CodigoProducto" />
+            <TableColumn fx:id="colNumDoc" minWidth="153.2" prefWidth="153.2" text="numeroDocumento" />
          </columns>
          <styleClass>
             <String fx:value="column-background" />
@@ -98,7 +94,7 @@
             <String fx:value="table-row-cell" />
          </styleClass>
       </TableView>
-      <GridPane layoutX="270.0" layoutY="137.0">
+      <GridPane layoutX="270.0" layoutY="150.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -106,18 +102,15 @@
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="txtCod" prefHeight="87.0" prefWidth="100.0" GridPane.columnIndex="1" />
-            <TextField fx:id="txtDescr" prefHeight="87.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="txtPrecUn" prefHeight="87.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Codigo" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Descripcion " GridPane.rowIndex="1" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Precio unitario" GridPane.rowIndex="2" />
+            <TextField fx:id="txtCod" GridPane.columnIndex="1" />
+            <TextField fx:id="txtCostUnit" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Codigo " />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Costo unitario" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <GridPane layoutX="505.0" layoutY="137.0" prefHeight="90.0" prefWidth="248.0">
+      <GridPane layoutX="553.0" layoutY="150.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -125,34 +118,25 @@
          <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <TextField fx:id="txtCant" GridPane.columnIndex="1" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cantidad" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Producto" GridPane.rowIndex="1" />
+            <ComboBox fx:id="cbxProducto" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+      <GridPane layoutX="781.0" layoutY="150.0" prefHeight="30.0" prefWidth="255.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="163.0" minWidth="10.0" prefWidth="163.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="37.0" />
+         </columnConstraints>
+         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextField fx:id="txtPrecDoc" prefHeight="87.0" prefWidth="100.0" GridPane.columnIndex="1" />
-            <TextField fx:id="txtMayo" prefHeight="87.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="txtImg" prefHeight="87.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Precio por Docena" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Precio Mayoreo" GridPane.rowIndex="1" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" GridPane.rowIndex="2" />
-         </children>
-      </GridPane>
-      <GridPane layoutX="798.0" layoutY="137.0" prefHeight="90.0" prefWidth="238.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Existencias" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de Producto" GridPane.rowIndex="1" />
-            <TextField fx:id="txtExist" prefHeight="57.0" prefWidth="100.0" GridPane.columnIndex="1" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Proveedor" GridPane.rowIndex="2" />
-            <ComboBox fx:id="cbxTipoProd" prefHeight="31.0" prefWidth="141.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ComboBox fx:id="cbxProv" prefHeight="31.0" prefWidth="141.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Numero de Documento" />
+            <ComboBox fx:id="cbxNumDoc" prefWidth="150.0" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

@@ -14,7 +14,7 @@ public class Compras {
 
     
     
-    public Compras(int numeroDocumento, String fechaDocumento, String descripcion, int totalDocumento) {
+    public Compras(int numeroDocumento, String fechaDocumento, String descripcion, Double totalDocumento) {
         this.numeroDocumento = numeroDocumento;
         this.fechaDocumento = fechaDocumento;
         this.descripcion = descripcion;
@@ -51,6 +51,11 @@ public class Compras {
 
     public void setTotalDocumento(double totalDocumento) {
         this.totalDocumento = totalDocumento;
+    }
+
+    @Override
+    public String toString() {
+        return  numeroDocumento + "| " +descripcion ;
     }
     
     

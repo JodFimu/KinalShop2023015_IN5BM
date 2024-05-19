@@ -119,7 +119,6 @@ public class ComprasController implements Initializable {
         txtNumeroDoc.setEditable(false);
         dpFecha.setEditable(true);
         txtDescr.setEditable(true);
-        txtTotal.setEditable(true);
     }
 
     public void limpiarControles() {
@@ -144,7 +143,7 @@ public class ComprasController implements Initializable {
                 lista.add(new Compras(resultado.getInt("numeroDocumento"),
                         resultado.getString("fechaDocumento"),
                         resultado.getString("descripcion"),
-                        resultado.getInt("totalDocumento")));
+                        resultado.getDouble("totalDocumento")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -203,13 +202,11 @@ public class ComprasController implements Initializable {
         Compras registro = new Compras();
         registro.setFechaDocumento(dpFecha.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         registro.setDescripcion(txtDescr.getText());
-        registro.setTotalDocumento(parseDouble(txtTotal.getText()));
 
         try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarCompras(?, ?, ?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarCompras(?, ?)}");
             procedimiento.setString(1, registro.getFechaDocumento());
             procedimiento.setString(2, registro.getDescripcion());
-            procedimiento.setDouble(3, registro.getTotalDocumento());
 
             procedimiento.execute();
             listarCompras.add(registro);
@@ -307,11 +304,10 @@ public class ComprasController implements Initializable {
         registro.setTotalDocumento(parseDouble(txtTotal.getText()));
 
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarCompras(?,?,?,?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarCompras(?,?,?)}");
             procedimiento.setInt(1, registro.getNumeroDocumento());
             procedimiento.setString(2, registro.getFechaDocumento());
             procedimiento.setString(3, registro.getDescripcion());
-            procedimiento.setDouble(4, registro.getTotalDocumento());
 
 
             procedimiento.execute();

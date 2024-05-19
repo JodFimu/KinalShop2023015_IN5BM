@@ -29,6 +29,16 @@ public class Productos {
         this.proveedor = proveedor;
     }
 
+    public Productos(String codigoProducto, String descripcionProducto, String imagenProducto, int tipoProducto, int proveedor) {
+        this.codigoProducto = codigoProducto;
+        this.descripcionProducto = descripcionProducto;
+        this.imagenProducto = imagenProducto;
+        this.tipoProducto = tipoProducto;
+        this.proveedor = proveedor;
+    }
+    
+    
+
     public String getCodigoProducto() {
         return codigoProducto;
     }
@@ -101,6 +111,11 @@ public class Productos {
         this.proveedor = proveedor;
     }
 
+    @Override
+    public String toString() {
+        return codigoProducto + "| " + descripcionProducto;
+    }
 
+    
  
 }

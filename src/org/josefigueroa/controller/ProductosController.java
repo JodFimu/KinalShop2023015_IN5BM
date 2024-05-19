@@ -1,6 +1,5 @@
 package org.josefigueroa.controller;
 
-import static java.lang.Double.parseDouble;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -166,11 +165,7 @@ public class ProductosController implements Initializable {
     public void activarControles() {
         txtCod.setEditable(true);
         txtDescr.setEditable(true);
-        txtPrecUn.setEditable(true);
-        txtPrecDoc.setEditable(true);
-        txtMayo.setEditable(true);
         txtImg.setEditable(true);
-        txtExist.setEditable(true);
         cbxTipoProd.setDisable(false);
         cbxProv.setDisable(false);
     }
@@ -295,23 +290,15 @@ public class ProductosController implements Initializable {
         registro.setProveedor(((Proveedores) cbxProv.getSelectionModel().getSelectedItem()).getCodigoProveedor());
         registro.setTipoProducto(((TipoProducto) cbxTipoProd.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
         registro.setDescripcionProducto(txtDescr.getText());
-        registro.setPrecioUnitario(Double.parseDouble(txtPrecUn.getText()));
-        registro.setPrecioDocena(Double.parseDouble(txtPrecDoc.getText()));
-        registro.setPrecioMayor(Double.parseDouble(txtMayo.getText()));
         registro.setImagenProducto(txtImg.getText());
-        registro.setExistencia(Integer.parseInt(txtExist.getText()));
         
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarProductos(?,?,?,?,?,?,?,?,?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarProductos(?,?,?,?,?)}");
             procedimiento.setString(1, registro.getCodigoProducto());
             procedimiento.setString(2, registro.getDescripcionProducto());
-            procedimiento.setDouble(3, registro.getPrecioUnitario());
-            procedimiento.setDouble(4, registro.getPrecioDocena());
-            procedimiento.setDouble(5, registro.getPrecioMayor());
-            procedimiento.setString(6, registro.getImagenProducto());
-            procedimiento.setInt(7, registro.getExistencia());
-            procedimiento.setInt(8, registro.getTipoProducto());
-            procedimiento.setInt(9, registro.getProveedor());
+            procedimiento.setString(3, registro.getImagenProducto());
+            procedimiento.setInt(4, registro.getTipoProducto());
+            procedimiento.setInt(5, registro.getProveedor());
             
             procedimiento.execute();
         }catch(Exception e){
@@ -382,7 +369,7 @@ public class ProductosController implements Initializable {
         return result;
     }
     
-    public void eliminarProveedores() {
+    public void eliminarProductos() {
         switch (tipoOperaciones) {
             case ACTUALIZAR:
                 desactivarControles();
@@ -406,7 +393,7 @@ public class ProductosController implements Initializable {
                             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarProductos(?)}");
                             procedimiento.setString(1, ((Productos) tblProductos.getSelectionModel().getSelectedItem()).getCodigoProducto());
                             boolean execute = procedimiento.execute();
-                            listarProveedores.remove(tblProductos.getSelectionModel().getSelectedItem());
+                            listarProductos.remove(tblProductos.getSelectionModel().getSelectedItem());
                             limpiarControles();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -432,11 +419,12 @@ public class ProductosController implements Initializable {
                     btnAgregar.setDisable(true);
                     btnEliminar.setDisable(true);
                     btnInicio.setDisable(true);
+                    txtCod.setDisable(true);
                     activarControles();
                     tipoOperaciones = operaciones.ACTUALIZAR;
                     break;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Seleccione a un Proveedor para editar");
+                    JOptionPane.showMessageDialog(null, "Seleccione una tupla para editar");
                     break;
                 }
             case ACTUALIZAR:
@@ -467,16 +455,12 @@ public class ProductosController implements Initializable {
         registro.setExistencia(Integer.parseInt(txtExist.getText()));
         
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarProductos(?,?,?,?,?,?,?,?,?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarProductos(?,?,?,?,?)}");
             procedimiento.setString(1, registro.getCodigoProducto());
             procedimiento.setString(2, registro.getDescripcionProducto());
-            procedimiento.setDouble(3, registro.getPrecioUnitario());
-            procedimiento.setDouble(4, registro.getPrecioDocena());
-            procedimiento.setDouble(5, registro.getPrecioMayor());
-            procedimiento.setString(6, registro.getImagenProducto());
-            procedimiento.setInt(7, registro.getExistencia());
-            procedimiento.setInt(8, registro.getTipoProducto());
-            procedimiento.setInt(9, registro.getProveedor());
+            procedimiento.setString(3, registro.getImagenProducto());
+            procedimiento.setInt(4, registro.getTipoProducto());
+            procedimiento.setInt(5, registro.getProveedor());
             procedimiento.execute();
             
             listarProductos.add(registro);
