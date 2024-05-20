@@ -220,7 +220,7 @@ public class EmpleadosController implements Initializable {
                 btnAgregar.setText("Guardar");
                 imgAgregar.setImage(new Image("/org/josefigueroa/images/guardar.png"));
                 imgEliminar.setImage(new Image("/org/josefigueroa/images/cancelar.png"));
-                txtCod.setEditable(true);
+                txtCod.setEditable(false);
                 btnReporte.setDisable(true);
                 btnEditar.setDisable(true);
                 btnInicio.setDisable(true);

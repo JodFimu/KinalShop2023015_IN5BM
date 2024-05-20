@@ -237,6 +237,7 @@ public class FacturaController implements Initializable {
                 btnAgregar.setText("Guardar");
                 imgAgregar.setImage(new Image("/org/josefigueroa/images/guardar.png"));
                 imgEliminar.setImage(new Image("/org/josefigueroa/images/cancelar.png"));
+                txtNumFact.setEditable(false);
                 btnReporte.setDisable(true);
                 btnEditar.setDisable(true);
                 btnInicio.setDisable(true);

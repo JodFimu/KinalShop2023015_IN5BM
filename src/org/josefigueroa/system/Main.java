@@ -13,6 +13,7 @@ import org.josefigueroa.controller.CargoEmpleadoController;
 import org.josefigueroa.controller.ClientesMenuController;
 import org.josefigueroa.controller.ComprasController;
 import org.josefigueroa.controller.DetalleCompraController;
+import org.josefigueroa.controller.DetalleFacturaController;
 import org.josefigueroa.controller.EmpleadosController;
 import org.josefigueroa.controller.FacturaController;
 import org.josefigueroa.controller.MenuPrincipalController;
@@ -149,6 +150,15 @@ public class Main extends Application {
         try{
             FacturaController FacturaView = (FacturaController) cambiarEscena("FacturaView.fxml", 1066, 675);
             FacturaView.setEscenarioPrincipal(this);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void DetalleFacturaView(){
+        try{
+            DetalleFacturaController detalleFacturaView = (DetalleFacturaController) cambiarEscena("DetalleFacturaView.fxml", 1066, 675);
+            detalleFacturaView.setEscenarioPrincipal(this);
         }catch(Exception e){
             e.printStackTrace();
         }
