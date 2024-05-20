@@ -144,7 +144,7 @@ public class ProductosController implements Initializable {
         colPrecDoc.setCellValueFactory(new PropertyValueFactory<Productos, Double>("precioDocena"));
         colPrecMay.setCellValueFactory(new PropertyValueFactory<Productos, Double>("precioMayor"));
         colImgProd.setCellValueFactory(new PropertyValueFactory<Productos, String>("imagenProducto"));
-        colExist.setCellValueFactory(new PropertyValueFactory<Productos, String>("existencia"));
+        colExist.setCellValueFactory(new PropertyValueFactory<Productos, Integer>("existencia"));
         colTipoProd.setCellValueFactory(new PropertyValueFactory<Productos, Integer>("tipoProducto"));
         colProv.setCellValueFactory(new PropertyValueFactory<Productos, Integer>("proveedor"));
 

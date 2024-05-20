@@ -1,17 +1,6 @@
 package org.josefigueroa.bean;
 
-/**
- *
-codigoEmpleado int auto_increment,
-    nombresEmpleado varchar(50),
-    apellidosEmpleado varchar(50),
-    sueldo decimal(10,2),
-    direccion varchar(150),
-    turno varchar(15),
-    codigoCargoEmpleado int,
-    primary key PK_codigoEmpleado(codigoEmpleado),
-    constraint FK_codigoCargoEmpleado foreign key Empleados(codigoCargoEmpleado) references CargoEmpleado(codigoCargoEmpleado)
-); */
+
 public class Empleados {
    private int codigoEmpleado;
    private String nombresEmpleado;
@@ -20,6 +9,20 @@ public class Empleados {
    private String direccion;
    private String turno;
    private int codigoCargoEmpleado;
+
+    public Empleados(){
+        
+    }
+
+    public Empleados(int codigoEmpleado, String nombresEmpleado, String apellidosEmpleado, Double sueldo, String direccion, String turno, int codigoCargoEmpleado) {
+        this.codigoEmpleado = codigoEmpleado;
+        this.nombresEmpleado = nombresEmpleado;
+        this.apellidosEmpleado = apellidosEmpleado;
+        this.sueldo = sueldo;
+        this.direccion = direccion;
+        this.turno = turno;
+        this.codigoCargoEmpleado = codigoCargoEmpleado;
+    }
 
     public int getCodigoEmpleado() {
         return codigoEmpleado;
