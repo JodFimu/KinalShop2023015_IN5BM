@@ -120,6 +120,8 @@ public class EmpleadosController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cargarDatos();
+        cbxCargo.setItems(getCargoEmpleado());
+        cbxCargo.setDisable(true);
     }    
     
     public void cargarDatos() {
@@ -252,7 +254,7 @@ public class EmpleadosController implements Initializable {
 
         
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarEmpleados(?,?,?,?,?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarEmpleados(?,?,?,?,?,?)}");
             procedimiento.setString(1, registro.getNombresEmpleado());
             procedimiento.setString(2, registro.getApellidosEmpleado());
             procedimiento.setDouble(3, registro.getSueldo());

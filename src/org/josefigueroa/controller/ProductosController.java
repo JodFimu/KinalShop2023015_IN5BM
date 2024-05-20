@@ -131,8 +131,8 @@ public class ProductosController implements Initializable {
         cargarDatos();
         cbxTipoProd.setItems(getTipoProducto());
         cbxProv.setItems(getProveedores());
-        cbxTipoProd.setDisable(false);
-        cbxProv.setDisable(false);
+        cbxTipoProd.setDisable(true);
+        cbxProv.setDisable(true);
     }    
     
     public void cargarDatos() {
