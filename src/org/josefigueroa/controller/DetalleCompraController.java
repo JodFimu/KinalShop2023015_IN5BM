@@ -352,7 +352,7 @@ public class DetalleCompraController implements Initializable {
                     if (resp == JOptionPane.YES_NO_OPTION) {
                         try {
                             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_eliminarDetalleCompra(?)}");
-                            procedimiento.setString(1, ((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoProducto());
+                            procedimiento.setInt(1, ((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra());
                             boolean execute = procedimiento.execute();
                             listarDetalleCompra.remove(tblDetCompra.getSelectionModel().getSelectedItem());
                             limpiarControles();

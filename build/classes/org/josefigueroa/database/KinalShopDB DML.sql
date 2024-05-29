@@ -448,6 +448,8 @@ begin
 end $$
 delimiter ;
 
+call sp_agregarDetalleCompra(1.00, 1, "111", 1);
+
 -- listar DetalleCompra
 delimiter $$
 create procedure sp_listarDetalleCompra()
@@ -489,7 +491,7 @@ delimiter ;
 
 -- actualizar DetalleCompra
 delimiter $$
-create procedure sp_actualizarDetalleCompra(in codDetCompra int, in cant int, in codProd varchar(15) , in numDoc int )
+create procedure sp_actualizarDetalleCompra(in codDetCompra int, in precUnit decimal(10,2), in cant int, in codProd varchar(15) , in numDoc int )
 begin
 	update DetalleCompra 
 	set 
@@ -761,8 +763,8 @@ for each row
 	begin
 		declare total decimal(10,2);
 		
-                set new.precioUnitario= (select precioUnitario from Productos
-					where Productos.codigoProducto=new.codigoProducto);
+        set new.precioUnitario= (select precioUnitario from Productos
+		where Productos.codigoProducto=new.codigoProducto);
         
 	end //
 delimiter ;
@@ -771,6 +773,21 @@ delimiter ;
 delimiter //
 create trigger tr_insertarPreciosProductos_after_Insert
 after insert on DetalleCompra
+for each row
+	begin
+    call sp_actualizarPreciosProductos(new.codigoProducto, 
+									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.40)),
+									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.35)),
+                                    (fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.25)),
+                                    new.cantidad);
+                                    
+	end //
+delimiter ;
+
+-- actualizar precios en Productos
+delimiter //
+create trigger tr_actualizarPreciosProductos_after_Insert
+after update on DetalleCompra
 for each row
 	begin
     call sp_actualizarPreciosProductos(new.codigoProducto, 
@@ -798,6 +815,38 @@ for each row
 	end //
 delimiter ;
 
+-- actualizar total compra
+delimiter //
+create trigger tr_actualizarTotalCompra_Before_Insert
+after update on DetalleCompra
+for each row
+	begin
+    declare total decimal(10,2);
+    
+    set total=((select sum(new.costoUnitario*new.cantidad) from DetalleCompra where DetalleCompra.numeroDocumento=new.numeroDocumento));
+    
+    call sp_actualizarComprasTotal(new.numeroDocumento, total);
+                                    
+	end //
+delimiter ;
+
+
+
+-- eliminar total compra
+delimiter //
+create trigger tr_eliminarTotalCompra_Before_Insert
+after delete on DetalleCompra
+for each row
+	begin
+    declare total decimal(10,2);
+    
+    set total=fn_TotalCompra(old.numeroDocumento);
+    
+    call sp_actualizarComprasTotal(old.numeroDocumento, total);
+                                    
+	end //
+delimiter ;
+
 -- insertar total factura
 delimiter //
 create trigger tr_insertarTotalFactura_Before_Insert
@@ -812,3 +861,6 @@ for each row
                                     
 	end //
 delimiter ;
+
+
+call sp_listarDetalleCompra();
