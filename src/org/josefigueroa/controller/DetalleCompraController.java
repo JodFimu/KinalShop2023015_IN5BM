@@ -70,7 +70,7 @@ public class DetalleCompraController implements Initializable {
     private ImageView imgInicio;
 
     @FXML
-    private TableView tblDetCompra;
+    private TableView<DetalleCompra> tblDetCompra;
 
     @FXML
     private TableColumn colCodDEtCompra;
@@ -110,13 +110,14 @@ public class DetalleCompraController implements Initializable {
     }    
     
     public void cargarDatos() {
-        desactivarControles();
+        
         tblDetCompra.setItems(getDetalleCompra());
         colCodDEtCompra.setCellValueFactory(new PropertyValueFactory<DetalleCompra, String>("codigoDetalleCompra"));
         colCostUnit.setCellValueFactory(new PropertyValueFactory<DetalleCompra, Double>("costoUnitario"));
         colCant.setCellValueFactory(new PropertyValueFactory<DetalleCompra, Integer>("cantidad"));
         colCodProd.setCellValueFactory(new PropertyValueFactory<DetalleCompra, String>("codigoProducto"));
         colNumDoc.setCellValueFactory(new PropertyValueFactory<DetalleCompra, Integer>("numeroDocumento"));
+        desactivarControles();
    }
     
      public void desactivarControles() {
@@ -266,13 +267,14 @@ public class DetalleCompraController implements Initializable {
     }
     
     public void seleccionarTupla() {
-        String codProd = ((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoProducto();
-        int codCompra =((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getNumeroDocumento();
-        cbxNumDoc.getSelectionModel().select(buscarCompra(codCompra));
+        DetalleCompra selectedItem = (DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem();
+        
+        txtCostUnit.setText(String.valueOf(selectedItem.getCostoUnitario()));
+        cbxProducto.getSelectionModel().select(buscaProducto(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoProducto()));
+        cbxNumDoc.getSelectionModel().select(buscarCompra(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
         txtCod.setText(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra()));
-        txtCostUnit.setText(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCostoUnitario()));
-        txtCant.setText(String.valueOf(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCantidad())));
-        cbxProducto.getSelectionModel().select(buscaProducto(codProd));
+        txtCant.setText(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCantidad()));
+        
     }
 
     public Compras buscarCompra(int codCompra) {
@@ -403,18 +405,23 @@ public class DetalleCompraController implements Initializable {
     }
     
     public void actualizar(){
-        String codProd = ((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoProducto();
+        //String codProd = ((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoProducto();
         
         DetalleCompra registro = (DetalleCompra)tblDetCompra.getSelectionModel().getSelectedItem();
+        registro.setCodigoDetalleCompra(Integer.parseInt(txtCod.getText()));
+        registro.setCodigoProducto(((Productos) cbxProducto.getSelectionModel().getSelectedItem()).getCodigoProducto());
+        registro.setNumeroDocumento(((Compras) cbxNumDoc.getSelectionModel().getSelectedItem()).getNumeroDocumento());
+        registro.setCostoUnitario(Double.parseDouble(txtCostUnit.getText()));
+        registro.setCantidad(Integer.parseInt(txtCant.getText()));
         
-        txtCod.setText(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra()));
+        /*txtCod.setText(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra()));
         txtCostUnit.setText(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCostoUnitario()));
         txtCant.setText(String.valueOf(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCantidad())));
         cbxNumDoc.getSelectionModel().select(buscarCompra(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
-        cbxProducto.getSelectionModel().select(buscaProducto(codProd));
+        cbxProducto.getSelectionModel().select(buscaProducto(codProd));*/
         
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarProductos(?,?,?,?,?)}");
+            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarDetalleCompra(?,?,?,?,?)}");
             procedimiento.setInt(1, registro.getCodigoDetalleCompra());
             procedimiento.setDouble(2, registro.getCostoUnitario());
             procedimiento.setInt(3, registro.getCantidad());
