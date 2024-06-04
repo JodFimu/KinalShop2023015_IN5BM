@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/jdfig/Desktop/Repositorio%20KinalShop2023015/KinalShop2023015_IN5BM/src/org/josefigueroa/system/Main.java</file>
+            <file>file:/C:/Users/jdfig/Desktop/Repositorio%20KinalShop2023015/KinalShop2023015_IN5BM/src/org/josefigueroa/controller/DetalleCompraController.java</file>
+            <file>file:/C:/Users/jdfig/Desktop/Repositorio%20KinalShop2023015/KinalShop2023015_IN5BM/src/org/josefigueroa/controller/EmpleadosController.java</file>
             <file>file:/C:/Users/jdfig/Desktop/Repositorio%20KinalShop2023015/KinalShop2023015_IN5BM/src/org/josefigueroa/controller/ProductosController.java</file>
-            <file>file:/C:/Users/jdfig/Desktop/Repositorio%20KinalShop2023015/KinalShop2023015_IN5BM/src/org/josefigueroa/bean/DetalleFactura.java</file>
-            <file>file:/C:/Users/jdfig/Desktop/Repositorio%20KinalShop2023015/KinalShop2023015_IN5BM/src/org/josefigueroa/controller/MenuPrincipalController.java</file>
-            <file>file:/C:/Users/jdfig/Desktop/Repositorio%20KinalShop2023015/KinalShop2023015_IN5BM/src/org/josefigueroa/controller/FacturaController.java</file>
+            <file>file:/C:/Users/jdfig/Desktop/Repositorio%20KinalShop2023015/KinalShop2023015_IN5BM/src/org/josefigueroa/bean/DetalleCompra.java</file>
             <file>file:/C:/Users/jdfig/Desktop/Repositorio%20KinalShop2023015/KinalShop2023015_IN5BM/src/org/josefigueroa/controller/DetalleFacturaController.java</file>
         </group>
     </open-files>

@@ -740,34 +740,44 @@ end //
 delimiter ;
 
 
-
--- total compra
-delimiter //
-create function fn_TotalCompra(numDocumento int) returns decimal(10,2)
-deterministic
-begin
-    declare sumatoria decimal(10,2);
-    
-    set sumatoria = (select sum(cantidad*costoUnitario) from DetalleCompra 
-					where numeroDocumento=numDocumento) ;
-    return sumatoria;
-end //
-delimiter ;
-
-
 -- Precios Detalle factura
+-- insertar Precios Detalle factura
 delimiter //
 create trigger tr_insertarPreciosDetalleFactura_Before_Insert
 before insert on DetalleFactura
 for each row
 	begin
-		declare total decimal(10,2);
-		
+        		
         set new.precioUnitario= (select precioUnitario from Productos
 		where Productos.codigoProducto=new.codigoProducto);
         
 	end //
 delimiter ;
+
+-- actualizar DetalleFactura
+delimiter $$
+create procedure sp_actualizarPrecioDetalleFactura(in codProd varchar(15), in precUnit decimal(10,2) )
+begin
+	update DetalleFactura 
+	set 
+		DetalleFactura.precioUnitario=precUnit
+    where
+		DetalleFactura.codigoProducto=codProd;
+end $$
+delimiter ;
+
+-- actualizar Precios Detalle factura
+delimiter //
+create trigger tr_actualizarPreciosDetalleFactura_after_update
+after update on Productos
+for each row
+	begin
+		call sp_actualizarPrecioDetalleFactura(new.codigoProducto,
+        (select new.precioUnitario from Productos where Productos.codigoProducto=new.codigoProducto));
+        
+	end //
+delimiter ;
+
 
 -- insertar precios en Productos
 delimiter //
@@ -786,7 +796,7 @@ delimiter ;
 
 -- actualizar precios en Productos
 delimiter //
-create trigger tr_actualizarPreciosProductos_after_Insert
+create trigger tr_actualizarPreciosProductos_after_update
 after update on DetalleCompra
 for each row
 	begin
@@ -799,10 +809,21 @@ for each row
 	end //
 delimiter ;
 
+-- eliminar precios en Productos
+delimiter //
+create trigger tr_eliminarPreciosProductos_after_delete
+after delete on DetalleCompra
+for each row
+	begin
+    call sp_actualizarPreciosProductos(old.codigoProducto, 0,0,0,0);
+                                    
+	end //
+delimiter ;
+
 
 -- insertar total compra
 delimiter //
-create trigger tr_insertarTotalCompra_Before_Insert
+create trigger tr_insertarTotalCompra_after_Insert
 after insert on DetalleCompra
 for each row
 	begin
@@ -817,7 +838,7 @@ delimiter ;
 
 -- actualizar total compra
 delimiter //
-create trigger tr_actualizarTotalCompra_Before_Insert
+create trigger tr_actualizarTotalCompra_after_update
 after update on DetalleCompra
 for each row
 	begin
@@ -830,11 +851,22 @@ for each row
 	end //
 delimiter ;
 
-
+-- total compra
+delimiter //
+create function fn_TotalCompra(numDocumento int) returns decimal(10,2)
+deterministic
+begin
+    declare sumatoria decimal(10,2);
+    
+    set sumatoria = (select sum(cantidad*costoUnitario) from DetalleCompra 
+					where numeroDocumento=numDocumento) ;
+    return sumatoria;
+end //
+delimiter ;
 
 -- eliminar total compra
 delimiter //
-create trigger tr_eliminarTotalCompra_Before_Insert
+create trigger tr_eliminarTotalCompra_after_delete
 after delete on DetalleCompra
 for each row
 	begin
@@ -847,9 +879,10 @@ for each row
 	end //
 delimiter ;
 
+
 -- insertar total factura
 delimiter //
-create trigger tr_insertarTotalFactura_Before_Insert
+create trigger tr_insertarTotalFactura_after_Insert
 after insert on DetalleFactura
 for each row
 	begin
@@ -862,5 +895,46 @@ for each row
 	end //
 delimiter ;
 
+-- actualizar total factura
+delimiter //
+create trigger tr_actualizarTotalFactura_after_update
+after update on DetalleFactura
+for each row
+	begin
+    declare total decimal(10,2);
+    
+    set total=((select sum(new.precioUnitario*cantidad) from DetalleFactura where DetalleFactura.numeroFactura=new.numeroFactura ));
+    
+    call sp_actualizarFacturaTotal(new.numeroFactura, total);
+                                    
+	end //
+delimiter ;
 
-call sp_listarDetalleCompra();
+
+-- total factura
+delimiter //
+create function fn_TotalFactura(numFact int) returns decimal(10,2)
+deterministic
+begin
+    declare sumatoria decimal(10,2);
+    
+    set sumatoria = (select sum(precioUnitario*cantidad) from DetalleFactura 
+					where numeroFactura=numFact) ;
+    return sumatoria;
+end //
+delimiter ;
+
+-- eliminar total factura
+delimiter //
+create trigger tr_eliminarTotalFactura_after_delete
+after delete on DetalleFactura
+for each row
+	begin
+    declare total decimal(10,2);
+    
+    set total=fn_TotalFactura(old.numeroFactura);
+    
+    call sp_actualizarFacturaTotal(old.numeroFactura, total);
+                                    
+	end //
+delimiter ;
