@@ -1,6 +1,5 @@
 .menubar{
-    -fx-background-color: transparent;
-    -fx-opacity: 0.5;
+    -fx-background-color: FDE767;
     -fx-border-width: 2.0;
 }
 
@@ -10,9 +9,14 @@
     -fx-text-fill: #ffffff;
 }
 
-.table-view.column-header,
+
 .table-view.column-background.filler{
     -fx-background-color: #FDE767;
+}
+
+.Button{
+    -fx-background-color: #FDE767;
+    
 }
 
 .table-row-cell:selected{

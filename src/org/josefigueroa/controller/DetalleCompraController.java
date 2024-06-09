@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -101,6 +102,18 @@ public class DetalleCompraController implements Initializable {
 
     @FXML
     private ComboBox cbxNumDoc;
+    
+    @FXML MenuItem btnMenuClientes;
+    @FXML MenuItem btnProgramador; 
+    @FXML MenuItem btnTipoProducto;
+    @FXML MenuItem btnCompras;
+    @FXML MenuItem btnCargoEmpleado;
+    @FXML MenuItem btnProveedores;
+    @FXML MenuItem btnProductos;
+    @FXML MenuItem btnDetCompra;
+    @FXML MenuItem btnEmpleados;
+    @FXML MenuItem btnFactura;
+    @FXML MenuItem btnDetalleFactura;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -405,7 +418,6 @@ public class DetalleCompraController implements Initializable {
     }
     
     public void actualizar(){
-        //String codProd = ((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoProducto();
         
         DetalleCompra registro = (DetalleCompra)tblDetCompra.getSelectionModel().getSelectedItem();
         registro.setCodigoDetalleCompra(Integer.parseInt(txtCod.getText()));
@@ -414,11 +426,6 @@ public class DetalleCompraController implements Initializable {
         registro.setCostoUnitario(Double.parseDouble(txtCostUnit.getText()));
         registro.setCantidad(Integer.parseInt(txtCant.getText()));
         
-        /*txtCod.setText(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCodigoDetalleCompra()));
-        txtCostUnit.setText(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCostoUnitario()));
-        txtCant.setText(String.valueOf(String.valueOf(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getCantidad())));
-        cbxNumDoc.getSelectionModel().select(buscarCompra(((DetalleCompra) tblDetCompra.getSelectionModel().getSelectedItem()).getNumeroDocumento()));
-        cbxProducto.getSelectionModel().select(buscaProducto(codProd));*/
         
         try{
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarDetalleCompra(?,?,?,?,?)}");
@@ -460,7 +467,28 @@ public class DetalleCompraController implements Initializable {
             escenarioPrincipal.menuPrincipalView();
         } else if (event.getSource() == btnAgregar) {
             activarControles();
-
+        }
+        
+        if (event.getSource() == btnMenuClientes){
+            escenarioPrincipal.menuClientesView();
+        }else if(event.getSource() == btnProgramador){
+            escenarioPrincipal.ProgramadorView();
+        }else if(event.getSource()==btnTipoProducto){
+            escenarioPrincipal.TipoProductoView();
+        }else if(event.getSource()==btnCompras){
+            escenarioPrincipal.ComprasView();
+        }else if(event.getSource()==btnCargoEmpleado){
+            escenarioPrincipal.CargoEmpleadoView();
+        }else if(event.getSource()==btnProveedores){
+            escenarioPrincipal.ProveedoresView();
+        }else if(event.getSource()==btnProductos){
+            escenarioPrincipal.ProductosView();
+        }else if(event.getSource()==btnEmpleados){
+            escenarioPrincipal.EmpleadosView();
+        }else if(event.getSource()==btnFactura){
+            escenarioPrincipal.FacturaView();
+        }else if(event.getSource()==btnDetalleFactura){
+            escenarioPrincipal.DetalleFacturaView();
         }
     }
 }

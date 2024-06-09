@@ -14,7 +14,7 @@
             <Image url="@../images/fondoInicio.png" />
          </image>
       </ImageView>
-      <MenuBar layoutY="-2.0" styleClass="menubar" stylesheets="@../resource/KinalShopCSS.css">
+      <MenuBar layoutY="-2.0" prefHeight="32.0" prefWidth="1020.0" styleClass="menubar" stylesheets="@../resource/KinalShopCSS.css">
         <menus>
           <Menu mnemonicParsing="false" text="Clientes">
             <items>
