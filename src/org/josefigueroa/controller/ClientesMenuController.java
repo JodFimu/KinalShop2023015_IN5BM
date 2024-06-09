@@ -4,6 +4,8 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,13 +22,10 @@ import javafx.scene.image.ImageView;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.Clientes;
 import org.josefigueroa.db.Conexion;
+import org.josefigueroa.report.GenerarReportes;
 import org.josefigueroa.system.Main;
 
-/**
- * FXML Controller class
- *
- * @author informatica
- */
+
 public class ClientesMenuController implements Initializable {
 
     private Main escenarioPrincipal;
@@ -316,10 +315,21 @@ public class ClientesMenuController implements Initializable {
                 tipoOperaciones = operaciones.NULL;
                 cargarDatos();
         }
+    }public void imprimirReporte(){
+        Map parametros= new HashMap();
+        
+        parametros.put("codigoCliente", null);
+        GenerarReportes.mostrarReportes("ReporteClientes.jasper", "Reporte de clientes", parametros);
+        
     }
 
+    
+    
     public void reporte() {
         switch (tipoOperaciones) {
+            case NULL:
+                imprimirReporte();
+                break;
             case ACTUALIZAR:
                 imgEditar.setImage(new Image("/org/josefigueroa/images/editar.png"));
                 imgReporte.setImage(new Image("/org/josefigueroa/images/reporte.png"));
@@ -332,10 +342,12 @@ public class ClientesMenuController implements Initializable {
                 limpiarControles();
                 tipoOperaciones = operaciones.NULL;
                 cargarDatos();
-            case NULL:
                 break;
+            
         }
     }
+    
+    
     
     public void actualizar(){
         Clientes registro = (Clientes)tblCliente.getSelectionModel().getSelectedItem();

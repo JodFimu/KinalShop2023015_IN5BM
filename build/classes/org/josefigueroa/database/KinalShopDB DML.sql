@@ -938,3 +938,52 @@ for each row
                                     
 	end //
 delimiter ;
+
+
+-- existencias
+-- proceso almacenado
+delimiter $$
+create procedure sp_actualizarExistenciaProductos(in codProd varchar(15), in exist int )
+begin
+	update Productos 
+	set 
+		Productos.existencia=exist
+    where
+		Productos.codigoProducto=codProd;
+end $$
+delimiter ;
+
+-- trigger
+delimiter //
+create trigger tr_actualizarExistencias_before_insert
+before insert on DetalleFactura
+for each row
+	begin
+		declare exist int ;
+        declare cant int;
+        
+        set cant = new.cantidad;
+		set exist= (select existencia from Productos where codigoProducto= new.codigoProducto) ;
+        
+        if (exist > cant) then
+        
+			set exist=exist-cant;
+			
+			call sp_actualizarExistenciaProductos(new.codigoProducto, exist);
+            
+		elseif (exist = cant) then
+        
+			set exist=exist-cant;
+			
+			call sp_actualizarExistenciaProductos(new.codigoProducto, exist);
+        
+        else
+			signal sqlstate "45000" set message_text = "supera el numero de existencias o no hay existencias";
+        end if;
+                           
+	end //
+delimiter ;
+
+
+drop trigger tr_actualizarExistencias_before_insert;
+drop procedure sp_actualizarExistenciaProductos;

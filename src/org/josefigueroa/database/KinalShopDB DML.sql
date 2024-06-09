@@ -3,6 +3,13 @@
 -- IN5BM
 -- 23/04/2024
 
+select Productos.descripcionProducto, Productos.precioUnitario, Productos.precioDocena, Productos.precioMayor, Productos.existencia, TipoProducto.descripcion, Proveedores.contactoPrincipal
+from Productos
+inner join TipoProducto on Productos.tipoProducto=TipoProducto.codigoTipoProducto
+inner join Proveedores on Productos.proveedor=Proveedores.codigoProveedor;
+
+select*from Productos;
+
 use DB_KinalShop2023015;
 -- agregqar cliente
 delimiter $$
@@ -984,6 +991,12 @@ for each row
 	end //
 delimiter ;
 
-
-drop trigger tr_actualizarExistencias_before_insert;
-drop procedure sp_actualizarExistenciaProductos;
+-- trigger
+delimiter //
+create trigger tr_actualizarPrecios_before_insert
+before insert on DetalleCompra
+for each row
+	begin
+		
+	end //
+delimiter ;

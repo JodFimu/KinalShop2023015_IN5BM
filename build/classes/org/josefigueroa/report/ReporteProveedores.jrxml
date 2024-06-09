@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteProveedores" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8a78a130-6d3f-4af0-9934-1724f68ab2f7">
+	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[call sp_listarProveedores() ]]>
+	</queryString>
+	<field name="codigoProveedor" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NITProveedor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombresProveedor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="apellidosProveedor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="direccionProveedor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="razonSocial" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="contactoPrincipal" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="paginaWeb" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band height="802" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="555" height="802" uuid="2a9b7747-e191-4392-9758-1f1a693d3564"/>
+				<imageExpression><![CDATA["C:\\Users\\jdfig\\Desktop\\Repositorio KinalShop2023015\\KinalShop2023015_IN5BM\\src\\org\\josefigueroa\\images\\fondoViews.png"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="231" y="27" width="100" height="20" uuid="9104b030-417f-461f-bc2c-3b9b79be4460"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Proveedores]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="e7b76d7a-9620-4c6b-842d-f3f2eb5b28a8"/>
+				<text><![CDATA[NIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="131" y="0" width="100" height="20" uuid="b97c8375-9f7d-4b2c-a36f-7055e10c6da6"/>
+				<text><![CDATA[Nombres]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="261" y="0" width="100" height="20" uuid="8e6d4ab5-276e-417a-afa8-92bd81cc0b13"/>
+				<text><![CDATA[Contacto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="394" y="0" width="100" height="20" uuid="292e81a8-96fc-4ea3-889d-95b25c74bcc6"/>
+				<text><![CDATA[Direccion]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="c4e10ee4-dd7d-4551-aaa9-5dc4ec9aff30"/>
+				<textFieldExpression><![CDATA[$F{NITProveedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="131" y="0" width="100" height="20" uuid="7f0c0119-2dc5-427b-aa70-4b20ac415a90"/>
+				<textFieldExpression><![CDATA[$F{nombresProveedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="261" y="0" width="100" height="20" uuid="cad1e6bb-f519-4ab8-b241-0e4f72bc3294"/>
+				<textFieldExpression><![CDATA[$F{contactoPrincipal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="394" y="0" width="100" height="20" uuid="5de92f7c-e888-46a4-9995-9575c3394cad"/>
+				<textFieldExpression><![CDATA[$F{direccionProveedor}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="23a90b4c-6cb3-446e-9521-56ea4b3e6a33"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
