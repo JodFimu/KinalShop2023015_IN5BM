@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteClientes" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f696edd-aaac-449b-9de4-33569a3be520">
-	<property name="ireport.zoom" value="1.4641000000000015"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteClientes" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f696edd-aaac-449b-9de4-33569a3be520">
+	<property name="ireport.zoom" value="1.331000000000004"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="29"/>
 	<queryString>
 		<![CDATA[call
  sp_listarClientes()]]>
@@ -29,23 +29,15 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<background>
-		<band height="802" splitType="Stretch">
+		<band height="555" splitType="Immediate">
 			<image scaleImage="FillFrame">
-				<reportElement x="0" y="0" width="555" height="802" uuid="f14f51cd-696b-41fa-8dd9-35d520fa90a0"/>
-				<imageExpression><![CDATA["C:\\Users\\jdfig\\Desktop\\Repositorio KinalShop2023015\\KinalShop2023015_IN5BM\\src\\org\\josefigueroa\\images\\fondoViews.png"]]></imageExpression>
+				<reportElement x="0" y="0" width="802" height="555" uuid="0a268308-db4c-4ac9-b42c-8f40827761e3"/>
+				<imageExpression><![CDATA["C:\\Users\\jdfig\\Desktop\\Repositorio KinalShop2023015\\KinalShop2023015_IN5BM\\src\\org\\josefigueroa\\images\\ClientesReport.png"]]></imageExpression>
 			</image>
 		</band>
 	</background>
 	<title>
-		<band height="45" splitType="Stretch">
-			<staticText>
-				<reportElement x="219" y="11" width="139" height="24" uuid="5c2bd530-b60e-405b-87b2-331718d124c1"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16"/>
-				</textElement>
-				<text><![CDATA[Clientes]]></text>
-			</staticText>
-		</band>
+		<band height="45" splitType="Stretch"/>
 	</title>
 	<columnHeader>
 		<band height="50">
@@ -54,16 +46,24 @@
 				<text><![CDATA[NIT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="119" y="30" width="100" height="20" uuid="e680f0ce-a372-4e40-a611-18dd70a8f57c"/>
+				<reportElement x="111" y="30" width="100" height="20" uuid="e680f0ce-a372-4e40-a611-18dd70a8f57c"/>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="236" y="30" width="100" height="20" uuid="5a828795-d362-4264-a135-8ebb5115bca8"/>
+				<reportElement x="241" y="30" width="100" height="20" uuid="5a828795-d362-4264-a135-8ebb5115bca8"/>
 				<text><![CDATA[Apellidos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="358" y="30" width="100" height="20" uuid="bd431e57-93c7-4744-a83f-48c34d9d4132"/>
+				<reportElement x="380" y="30" width="100" height="20" uuid="bd431e57-93c7-4744-a83f-48c34d9d4132"/>
 				<text><![CDATA[Correo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="525" y="30" width="100" height="20" uuid="1492b6ba-a96a-4c4a-8102-0820adcd3cab"/>
+				<text><![CDATA[Direccion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="670" y="30" width="100" height="20" uuid="7fa74fe4-86e3-4ea5-9509-a97925984481"/>
+				<text><![CDATA[Telefono]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -74,19 +74,42 @@
 				<textFieldExpression><![CDATA[$F{NITCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="119" y="1" width="100" height="20" uuid="0407ae8e-e443-48e8-917a-a9a0738a8745"/>
+				<reportElement x="111" y="2" width="100" height="20" uuid="0407ae8e-e443-48e8-917a-a9a0738a8745"/>
 				<textFieldExpression><![CDATA[$F{nombreCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="236" y="1" width="100" height="20" uuid="93d583ee-8e82-45f1-aac5-000b4d53416b"/>
+				<reportElement x="241" y="0" width="100" height="20" uuid="93d583ee-8e82-45f1-aac5-000b4d53416b"/>
 				<textFieldExpression><![CDATA[$F{apellidosCliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="358" y="1" width="100" height="20" uuid="56c59790-aae4-464b-b89c-41f62a1db6c2"/>
+				<reportElement x="380" y="0" width="100" height="20" uuid="56c59790-aae4-464b-b89c-41f62a1db6c2"/>
 				<textFieldExpression><![CDATA[$F{correoCliente}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="0" width="555" height="1" uuid="022cc4f0-3877-4dd3-a72f-0af85ea8f5ca"/>
+				<reportElement x="0" y="0" width="802" height="1" uuid="022cc4f0-3877-4dd3-a72f-0af85ea8f5ca"/>
+			</line>
+			<textField>
+				<reportElement x="525" y="1" width="100" height="20" uuid="70b7ec48-2aaf-4ac0-8840-ea28aae84eb8"/>
+				<textFieldExpression><![CDATA[$F{direccionCliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="670" y="2" width="100" height="20" uuid="d4245ad9-eeec-41a0-8e7a-d0db19c0a9b0"/>
+				<textFieldExpression><![CDATA[$F{telefonoCliente}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="105" y="1" width="1" height="21" uuid="747441a8-95c5-4c01-a665-0ccbe7bff35d"/>
+			</line>
+			<line>
+				<reportElement x="226" y="1" width="1" height="20" uuid="351f2bd9-d733-4acb-afb0-ab482c367b4b"/>
+			</line>
+			<line>
+				<reportElement x="359" y="1" width="1" height="21" uuid="d658a027-85c8-4add-ba61-2082936a15b9"/>
+			</line>
+			<line>
+				<reportElement x="504" y="0" width="1" height="21" uuid="4c0650c4-cfcf-4027-ae92-9b92d832540f"/>
+			</line>
+			<line>
+				<reportElement x="647" y="1" width="1" height="21" uuid="90ee00be-e26f-4ca6-85cc-ad87cce7ebd6"/>
 			</line>
 		</band>
 	</detail>

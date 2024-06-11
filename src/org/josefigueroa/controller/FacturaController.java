@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +28,7 @@ import org.josefigueroa.bean.Clientes;
 import org.josefigueroa.bean.Empleados;
 import org.josefigueroa.bean.Factura;
 import org.josefigueroa.db.Conexion;
+import org.josefigueroa.report.GenerarReportes;
 import org.josefigueroa.system.Main;
 
 public class FacturaController implements Initializable {
@@ -295,7 +298,7 @@ public class FacturaController implements Initializable {
         Clientes result=null;
         
         try{
-           PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_buscarClientes(?)}");
+           PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_buscarCliente(?)}");
            procedimiento.setInt(1, cod);
            
            ResultSet registro = procedimiento.executeQuery();
@@ -443,8 +446,22 @@ public class FacturaController implements Initializable {
         }
     }
     
+    
+    public void imprimirReporte(){
+        Map parametros = new HashMap();
+        
+        
+        int IDFact = Integer.valueOf(((Factura) tblFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
+        parametros.put("IDFact", IDFact);
+        
+        GenerarReportes.mostrarReportes("Factura.jasper", "Factura", parametros);
+    }
+    
     public void reporte() {
         switch (tipoOperaciones) {
+            case NULL:
+                imprimirReporte();
+                break;
             case ACTUALIZAR:
                 imgEditar.setImage(new Image("/org/josefigueroa/images/editar.png"));
                 imgReporte.setImage(new Image("/org/josefigueroa/images/reporte.png"));
@@ -457,7 +474,7 @@ public class FacturaController implements Initializable {
                 limpiarControles();
                 tipoOperaciones = operaciones.NULL;
                 cargarDatos();
-            case NULL:
+            
                 break;
         }
     }

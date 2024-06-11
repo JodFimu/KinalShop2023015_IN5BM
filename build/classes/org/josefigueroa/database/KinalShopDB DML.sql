@@ -3,12 +3,6 @@
 -- IN5BM
 -- 23/04/2024
 
-select Productos.descripcionProducto, Productos.precioUnitario, Productos.precioDocena, Productos.precioMayor, Productos.existencia, TipoProducto.descripcion, Proveedores.contactoPrincipal
-from Productos
-inner join TipoProducto on Productos.tipoProducto=TipoProducto.codigoTipoProducto
-inner join Proveedores on Productos.proveedor=Proveedores.codigoProveedor;
-
-select*from Productos;
 
 use DB_KinalShop2023015;
 -- agregqar cliente
@@ -429,15 +423,14 @@ end $$
 delimiter ;
 
 delimiter $$
-create procedure sp_actualizarPreciosProductos(in codProd varchar(15),in precUnit decimal(10,2),in precDoc decimal(10,5), in precMay decimal(10,2), in exist int)
+create procedure sp_actualizarPreciosProductos(in codProd varchar(15),in precUnit decimal(10,2),in precDoc decimal(10,5), in precMay decimal(10,2))
 begin
 	update Productos 
 	set 
 		Productos.precioUnitario=precUnit,
 		Productos.precioDocena=precDoc,
-        Productos.precioMayor=precMay,
-        Productos.existencia=exist
-    where
+        Productos.precioMayor=precMay
+	where
 		Productos.codigoProducto=codProd;
 end $$
 delimiter ;
@@ -756,7 +749,7 @@ for each row
 	begin
         		
         set new.precioUnitario= (select precioUnitario from Productos
-		where Productos.codigoProducto=new.codigoProducto);
+		where Productos.codigoProducto=new.codigoProducto limit 1);
         
 	end //
 delimiter ;
@@ -773,6 +766,7 @@ begin
 end $$
 delimiter ;
 
+
 -- actualizar Precios Detalle factura
 delimiter //
 create trigger tr_actualizarPreciosDetalleFactura_after_update
@@ -780,7 +774,7 @@ after update on Productos
 for each row
 	begin
 		call sp_actualizarPrecioDetalleFactura(new.codigoProducto,
-        (select new.precioUnitario from Productos where Productos.codigoProducto=new.codigoProducto));
+        (select new.precioUnitario from Productos where Productos.codigoProducto=new.codigoProducto limit 1));
         
 	end //
 delimiter ;
@@ -795,11 +789,11 @@ for each row
     call sp_actualizarPreciosProductos(new.codigoProducto, 
 									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.40)),
 									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.35)),
-                                    (fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.25)),
-                                    new.cantidad);
+                                    (fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.25)));
                                     
 	end //
 delimiter ;
+
 
 -- actualizar precios en Productos
 delimiter //
@@ -810,11 +804,11 @@ for each row
     call sp_actualizarPreciosProductos(new.codigoProducto, 
 									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.40)),
 									(fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.35)),
-                                    (fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.25)),
-                                    new.cantidad);
+                                    (fn_TraerPrecioUnitario(new.codigoProducto)+(fn_TraerPrecioUnitario(new.codigoProducto)*0.25)));
                                     
 	end //
 delimiter ;
+
 
 -- eliminar precios en Productos
 delimiter //
@@ -822,7 +816,7 @@ create trigger tr_eliminarPreciosProductos_after_delete
 after delete on DetalleCompra
 for each row
 	begin
-    call sp_actualizarPreciosProductos(old.codigoProducto, 0,0,0,0);
+    call sp_actualizarPreciosProductos(old.codigoProducto, 0,0,0);
                                     
 	end //
 delimiter ;
@@ -918,6 +912,7 @@ for each row
 delimiter ;
 
 
+
 -- total factura
 delimiter //
 create function fn_TotalFactura(numFact int) returns decimal(10,2)
@@ -960,17 +955,30 @@ begin
 end $$
 delimiter ;
 
+-- traer el precio unitario
+delimiter //
+create function fn_TraerExistencias(codProd varchar(15)) returns int
+deterministic
+begin
+	declare existencias int;
+	set existencias= (select existencia from Productos where codigoProducto=codProd limit 1);
+	return existencias;
+end //
+
+delimiter ;
+
+
 -- trigger
 delimiter //
 create trigger tr_actualizarExistencias_before_insert
 before insert on DetalleFactura
 for each row
 	begin
-		declare exist int ;
+		declare exist int;
         declare cant int;
         
         set cant = new.cantidad;
-		set exist= (select existencia from Productos where codigoProducto= new.codigoProducto) ;
+		set exist= fn_TraerExistencias(new.codigoProducto);
         
         if (exist > cant) then
         
@@ -991,12 +999,11 @@ for each row
 	end //
 delimiter ;
 
--- trigger
-delimiter //
-create trigger tr_actualizarPrecios_before_insert
-before insert on DetalleCompra
-for each row
-	begin
-		
-	end //
-delimiter ;
+
+
+
+
+drop trigger tr_actualizarExistencias_before_insert;
+
+call sp_agregarDetalleFactura(1, 3, "1" );
+call sp_listarProductos;

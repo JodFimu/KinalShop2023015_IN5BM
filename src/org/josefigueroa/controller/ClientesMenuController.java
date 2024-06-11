@@ -348,7 +348,9 @@ public class ClientesMenuController implements Initializable {
                 tipoOperaciones = operaciones.NULL;
                 cargarDatos();
         }
-    }public void imprimirReporte(){
+    }
+    
+    public void imprimirReporte(){
         Map parametros= new HashMap();
         
         parametros.put("codigoCliente", null);

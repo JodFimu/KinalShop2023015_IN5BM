@@ -749,7 +749,7 @@ for each row
 	begin
         		
         set new.precioUnitario= (select precioUnitario from Productos
-		where Productos.codigoProducto=new.codigoProducto);
+		where Productos.codigoProducto=new.codigoProducto limit 1);
         
 	end //
 delimiter ;
@@ -766,6 +766,7 @@ begin
 end $$
 delimiter ;
 
+
 -- actualizar Precios Detalle factura
 delimiter //
 create trigger tr_actualizarPreciosDetalleFactura_after_update
@@ -773,7 +774,7 @@ after update on Productos
 for each row
 	begin
 		call sp_actualizarPrecioDetalleFactura(new.codigoProducto,
-        (select new.precioUnitario from Productos where Productos.codigoProducto=new.codigoProducto));
+        (select new.precioUnitario from Productos where Productos.codigoProducto=new.codigoProducto limit 1));
         
 	end //
 delimiter ;
@@ -807,6 +808,7 @@ for each row
                                     
 	end //
 delimiter ;
+
 
 -- eliminar precios en Productos
 delimiter //
@@ -910,6 +912,7 @@ for each row
 delimiter ;
 
 
+
 -- total factura
 delimiter //
 create function fn_TotalFactura(numFact int) returns decimal(10,2)
@@ -958,7 +961,7 @@ create function fn_TraerExistencias(codProd varchar(15)) returns int
 deterministic
 begin
 	declare existencias int;
-	set existencias= (select existencia from Productos where codigoProducto=codProd);
+	set existencias= (select existencia from Productos where codigoProducto=codProd limit 1);
 	return existencias;
 end //
 
@@ -997,22 +1000,10 @@ for each row
 delimiter ;
 
 
--- trigger
-delimiter //
-create trigger tr_actualizarCantidad_before_insert
-after insert on DetalleCompra
-for each row
-	begin
-		  declare cant int;
-          
-          set cant = (select existencia from Productos where codigoProducto=new.codigoProducto);
-          
-          call sp_actualizarExistenciaProductos(new.codigoProducto, (cant+new.cantidad));
-          
-	end //
-delimiter ;
 
--- drop trigger tr_actualizarCantidad_before_insert;
 
-call sp_agregarDetalleCompra(12, 1, "1", 1 );
-call sp_listarDetalleCompra;
+
+drop trigger tr_actualizarExistencias_before_insert;
+
+call sp_agregarDetalleFactura(1, 3, "1" );
+call sp_listarProductos;
