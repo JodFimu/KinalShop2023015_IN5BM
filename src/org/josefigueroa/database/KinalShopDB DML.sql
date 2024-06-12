@@ -85,7 +85,6 @@ begin
 end $$
 delimiter ;
 
-call sp_agregarTipoProducto("aaaaaa");
 
 -- listar TipoProducto
 delimiter $$
@@ -733,12 +732,11 @@ deterministic
 begin
 	declare precio decimal(10,2);
 	set precio= (select DetalleCompra.costoUnitario from DetalleCompra
-    where DetalleCompra.codigoProducto=codProd);
+    where DetalleCompra.codigoProducto=codProd limit 1);
 	return precio;
 end //
 
 delimiter ;
-
 
 -- Precios Detalle factura
 -- insertar Precios Detalle factura
@@ -747,7 +745,6 @@ create trigger tr_insertarPreciosDetalleFactura_Before_Insert
 before insert on DetalleFactura
 for each row
 	begin
-        		
         set new.precioUnitario= (select precioUnitario from Productos
 		where Productos.codigoProducto=new.codigoProducto limit 1);
         
@@ -830,12 +827,13 @@ for each row
 	begin
     declare total decimal(10,2);
     
-    set total=((select sum(costoUnitario*cantidad) from DetalleCompra where DetalleCompra.numeroDocumento=new.numeroDocumento));
+    set total=((select sum(costoUnitario*cantidad) from DetalleCompra where DetalleCompra.numeroDocumento=new.numeroDocumento ));
     
     call sp_actualizarComprasTotal(new.numeroDocumento, total);
                                     
 	end //
 delimiter ;
+
 
 -- actualizar total compra
 delimiter //
@@ -845,7 +843,7 @@ for each row
 	begin
     declare total decimal(10,2);
     
-    set total=((select sum(new.costoUnitario*new.cantidad) from DetalleCompra where DetalleCompra.numeroDocumento=new.numeroDocumento));
+    set total=((select sum(new.costoUnitario*new.cantidad) from DetalleCompra where DetalleCompra.numeroDocumento=new.numeroDocumento ));
     
     call sp_actualizarComprasTotal(new.numeroDocumento, total);
                                     
@@ -860,7 +858,7 @@ begin
     declare sumatoria decimal(10,2);
     
     set sumatoria = (select sum(cantidad*costoUnitario) from DetalleCompra 
-					where numeroDocumento=numDocumento) ;
+					where numeroDocumento=numDocumento ) ;
     return sumatoria;
 end //
 delimiter ;
@@ -892,6 +890,7 @@ for each row
     set total=((select sum(precioUnitario*cantidad) from DetalleFactura where DetalleFactura.numeroFactura=new.numeroFactura ));
     
     call sp_actualizarFacturaTotal(new.numeroFactura, total);
+    
                                     
 	end //
 delimiter ;
@@ -910,7 +909,6 @@ for each row
                                     
 	end //
 delimiter ;
-
 
 
 -- total factura
@@ -970,40 +968,55 @@ delimiter ;
 
 -- trigger
 delimiter //
-create trigger tr_actualizarExistencias_before_insert
-before insert on DetalleFactura
+create trigger tr_insertarExistenciasProductos_after_insert
+after insert on DetalleCompra
 for each row
 	begin
-		declare exist int;
-        declare cant int;
+		declare cant int;
+		
+        set cant= (select existencia from Productos where Productos.codigoProducto=new.codigoProducto);
         
-        set cant = new.cantidad;
-		set exist= fn_TraerExistencias(new.codigoProducto);
-        
-        if (exist > cant) then
-        
-			set exist=exist-cant;
-			
-			call sp_actualizarExistenciaProductos(new.codigoProducto, exist);
-            
-		elseif (exist = cant) then
-        
-			set exist=exist-cant;
-			
-			call sp_actualizarExistenciaProductos(new.codigoProducto, exist);
-        
-        else
-			signal sqlstate "45000" set message_text = "supera el numero de existencias o no hay existencias";
-        end if;
-                           
+		update Productos
+        set
+			Productos.existencia=new.cantidad+cant,
+            Productos.precioUnitario=new.costoUnitario
+        where
+            Productos.codigoProducto=new.codigoProducto;             
 	end //
 delimiter ;
 
 
+-- clientes registros
+CALL sp_agregarCliente('John', 'Doe', '1234567890', '123 Main St', '555-1234', 'john.doe@example.com');
+CALL sp_agregarCliente('Jane', 'Smith', '0987654321', '456 Elm St', '555-5678', 'jane.smith@example.com');
+CALL sp_agregarCliente('Alice', 'Johnson', '2345678901', '789 Oak St', '555-9012', 'alice.johnson@example.com');
+CALL sp_agregarCliente('Bob', 'Brown', '3456789012', '321 Pine St', '555-3456', 'bob.brown@example.com');
+CALL sp_agregarCliente('Charlie', 'Davis', '4567890123', '654 Maple St', '555-7890', 'charlie.davis@example.com');
 
+-- tipoProducto
+CALL sp_agregarTipoProducto('Electronics');
+CALL sp_agregarTipoProducto('Furniture');
+CALL sp_agregarTipoProducto('Clothing');
+CALL sp_agregarTipoProducto('Books');
+CALL sp_agregarTipoProducto('Toys');
 
+-- proveedores
+CALL sp_agregarProveedores('1234567890', 'Empresa ABC', 'S.A.', '123 Calle Principal', 'ABC Corp', 'Juan Pérez', 'www.empresaabc.com');
+CALL sp_agregarProveedores('9876543210', 'Corporación XYZ', 'Ltda.', '456 Calle Elm', 'XYZ Corp', 'Ana Gómez', 'www.xyzcorp.com');
+CALL sp_agregarProveedores('2345678901', 'Smith y Hijos', 'SRL', '789 Calle Roble', 'Smith y Hijos', 'María López', 'www.smithyhijos.com');
+CALL sp_agregarProveedores('3456789012', 'Empresas Johnson', 'S.C.', '321 Calle Pino', 'Empresas Johnson', 'Roberto Martínez', 'www.empresasjohnson.com');
+CALL sp_agregarProveedores('4567890123', 'Doe y Cía', 'S.A.', '654 Calle Arce', 'Doe y Cía', 'Laura Rodríguez', 'www.doeycia.com');
 
-drop trigger tr_actualizarExistencias_before_insert;
+-- Productos
+CALL sp_agregarProductos('PRD001', 'Teléfono móvil', 'phone.jpg', 1, 1);
+CALL sp_agregarProductos('PRD002', 'Silla de oficina', 'chair.jpg', 2, 2);
+CALL sp_agregarProductos('PRD003', 'Camiseta deportiva', 'shirt.jpg', 3, 3);
+CALL sp_agregarProductos('PRD004', 'Libro de cocina', 'book.jpg', 4, 4);
+CALL sp_agregarProductos('PRD005', 'Juguete educativo', 'toy.jpg', 5, 5);
 
-call sp_agregarDetalleFactura(1, 3, "1" );
-call sp_listarProductos;
+-- compras
+CALL sp_agregarCompras('2024-06-10', 'Compra de suministros de oficina');
+CALL sp_agregarCompras('2024-06-09', 'Compra de equipo informático');
+CALL sp_agregarCompras('2024-06-08', 'Compra de materiales de construcción');
+CALL sp_agregarCompras('2024-06-07', 'Compra de muebles para la oficina');
+CALL sp_agregarCompras('2024-06-06', 'Compra de productos alimenticios');
