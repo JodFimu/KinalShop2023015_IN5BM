@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -128,6 +129,17 @@ public class ProductosController implements Initializable {
 
     @FXML
     private ComboBox cbxProv;
+    
+    @FXML MenuItem btnMenuClientes;
+    @FXML MenuItem btnProgramador; 
+    @FXML MenuItem btnTipoProducto;
+    @FXML MenuItem btnCompras;
+    @FXML MenuItem btnCargoEmpleado;
+    @FXML MenuItem btnProveedores;
+    @FXML MenuItem btnDetCompra;
+    @FXML MenuItem btnEmpleados;
+    @FXML MenuItem btnFactura;
+    @FXML MenuItem btnDetalleFactura;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -508,7 +520,28 @@ public class ProductosController implements Initializable {
             escenarioPrincipal.menuPrincipalView();
         } else if (event.getSource() == btnAgregar) {
             activarControles();
-
+        }
+        
+        if (event.getSource() == btnMenuClientes){
+            escenarioPrincipal.menuClientesView();
+        }else if(event.getSource() == btnProgramador){
+            escenarioPrincipal.ProgramadorView();
+        }else if(event.getSource()==btnTipoProducto){
+            escenarioPrincipal.TipoProductoView();
+        }else if(event.getSource()==btnCompras){
+            escenarioPrincipal.ComprasView();
+        }else if(event.getSource()==btnCargoEmpleado){
+            escenarioPrincipal.CargoEmpleadoView();
+        }else if(event.getSource()==btnProveedores){
+            escenarioPrincipal.ProveedoresView();
+        }else if(event.getSource()==btnDetCompra){
+            escenarioPrincipal.DetalleCompraView();
+        }else if(event.getSource()==btnEmpleados){
+            escenarioPrincipal.EmpleadosView();
+        }else if(event.getSource()==btnFactura){
+            escenarioPrincipal.FacturaView();
+        }else if(event.getSource()==btnDetalleFactura){
+            escenarioPrincipal.DetalleFacturaView();
         }
     }
 }

@@ -895,6 +895,7 @@ for each row
 	end //
 delimiter ;
 
+
 -- actualizar total factura
 delimiter //
 create trigger tr_actualizarTotalFactura_after_update
@@ -992,6 +993,32 @@ for each row
             Productos.codigoProducto=new.codigoProducto;             
 	end //
 delimiter ;
+
+
+-- trigger
+delimiter //
+create trigger tr_eliminarExistenciasProductos_after_insert
+after insert on DetalleFactura
+for each row
+	begin
+		declare cant int;
+		
+        set cant= (select existencia from Productos where Productos.codigoProducto=new.codigoProducto);
+        
+        if new.cantidad>=cant then 
+			signal sqlstate "45000" set message_text = "supera el numero de existencias o no hay existencias";			 
+		else 
+			update Productos
+			set
+				Productos.existencia=new.cantidad-cant,
+				Productos.precioUnitario=new.precioUnitario
+			where
+				Productos.codigoProducto=new.codigoProducto;
+        end if;
+	end //
+delimiter ;
+
+drop trigger tr_eliminarExistenciasProductos_after_insert;
 
 
 -- clientes registros
