@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteProveedores" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8a78a130-6d3f-4af0-9934-1724f68ab2f7">
-	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.zoom" value="1.2100000000000017"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
-		<![CDATA[call sp_listarProveedores() ]]>
+		<![CDATA[call sp_listarProveedores()]]>
 	</queryString>
 	<field name="codigoProveedor" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -33,44 +33,36 @@
 	<background>
 		<band height="802" splitType="Stretch">
 			<image scaleImage="FillFrame">
-				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="555" height="802" uuid="2a9b7747-e191-4392-9758-1f1a693d3564"/>
-				<imageExpression><![CDATA["C:\\Users\\jdfig\\Desktop\\Repositorio KinalShop2023015\\KinalShop2023015_IN5BM\\src\\org\\josefigueroa\\images\\fondoViews.png"]]></imageExpression>
+				<reportElement x="0" y="0" width="555" height="802" uuid="1addbe34-8d17-43c3-aae6-4349566d217d"/>
+				<imageExpression><![CDATA["C:\\Users\\jdfig\\Desktop\\Repositorio KinalShop2023015\\KinalShop2023015_IN5BM\\src\\org\\josefigueroa\\images\\ProveedoresReport.png"]]></imageExpression>
 			</image>
 		</band>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
-			<staticText>
-				<reportElement x="231" y="27" width="100" height="20" uuid="9104b030-417f-461f-bc2c-3b9b79be4460"/>
-				<textElement textAlignment="Center">
-					<font size="14"/>
-				</textElement>
-				<text><![CDATA[Proveedores]]></text>
-			</staticText>
-		</band>
+		<band height="79" splitType="Stretch"/>
 	</title>
 	<columnHeader>
 		<band height="27" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="e7b76d7a-9620-4c6b-842d-f3f2eb5b28a8"/>
+				<reportElement x="0" y="7" width="100" height="20" uuid="e7b76d7a-9620-4c6b-842d-f3f2eb5b28a8"/>
 				<text><![CDATA[NIT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="131" y="0" width="100" height="20" uuid="b97c8375-9f7d-4b2c-a36f-7055e10c6da6"/>
+				<reportElement x="131" y="7" width="100" height="20" uuid="b97c8375-9f7d-4b2c-a36f-7055e10c6da6"/>
 				<text><![CDATA[Nombres]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="261" y="0" width="100" height="20" uuid="8e6d4ab5-276e-417a-afa8-92bd81cc0b13"/>
+				<reportElement x="261" y="7" width="100" height="20" uuid="8e6d4ab5-276e-417a-afa8-92bd81cc0b13"/>
 				<text><![CDATA[Contacto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="394" y="0" width="100" height="20" uuid="292e81a8-96fc-4ea3-889d-95b25c74bcc6"/>
+				<reportElement x="394" y="7" width="100" height="20" uuid="292e81a8-96fc-4ea3-889d-95b25c74bcc6"/>
 				<text><![CDATA[Direccion]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="46" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="100" height="20" uuid="c4e10ee4-dd7d-4551-aaa9-5dc4ec9aff30"/>
 				<textFieldExpression><![CDATA[$F{NITProveedor}]]></textFieldExpression>
@@ -89,6 +81,15 @@
 			</textField>
 			<line>
 				<reportElement x="0" y="0" width="555" height="1" uuid="23a90b4c-6cb3-446e-9521-56ea4b3e6a33"/>
+			</line>
+			<line>
+				<reportElement x="373" y="1" width="1" height="23" uuid="d4d05cc4-3661-4619-8f29-b323c1d1f087"/>
+			</line>
+			<line>
+				<reportElement x="246" y="1" width="1" height="23" uuid="03953dfd-963a-484a-9552-b537756a4ce0"/>
+			</line>
+			<line>
+				<reportElement x="115" y="1" width="1" height="23" uuid="d953a36b-192b-437c-995b-c1d33cedd821"/>
 			</line>
 		</band>
 	</detail>

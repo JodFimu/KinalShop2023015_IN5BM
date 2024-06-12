@@ -2,9 +2,9 @@
 -- José David Figueroa Muñoz 2023015
 -- IN5BM
 -- 23/04/2024
-alter user 'root'@'localhost' identified with mysql_native_password by "190207";
+-- alter user 'root'@'localhost' identified with mysql_native_password by "190207";
 
- drop database if exists DB_KinalShop2023015;
+drop database if exists DB_KinalShop2023015;
 
 create database DB_KinalShop2023015;
 

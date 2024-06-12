@@ -965,10 +965,18 @@ end //
 
 delimiter ;
 
+delimiter //
+create trigger tr_insertarExistenciasProductos_after_insert
+before insert on Productos
+for each row
+	begin
+		set new.existencia=0;          
+	end //
+delimiter ;
 
 -- trigger
 delimiter //
-create trigger tr_insertarExistenciasProductos_after_insert
+create trigger tr_insertarNuevasExistenciasProductos_after_insert
 after insert on DetalleCompra
 for each row
 	begin
@@ -1020,3 +1028,37 @@ CALL sp_agregarCompras('2024-06-09', 'Compra de equipo informático');
 CALL sp_agregarCompras('2024-06-08', 'Compra de materiales de construcción');
 CALL sp_agregarCompras('2024-06-07', 'Compra de muebles para la oficina');
 CALL sp_agregarCompras('2024-06-06', 'Compra de productos alimenticios');
+
+-- detalle Compra
+CALL sp_agregarDetalleCompra(100.50, 2, 'PRD001', 1);
+CALL sp_agregarDetalleCompra(75.25, 3, 'PRD002', 2);
+CALL sp_agregarDetalleCompra(50.75, 1, 'PRD003', 2);
+CALL sp_agregarDetalleCompra(120.00, 4, 'PRD004', 1);
+CALL sp_agregarDetalleCompra(30.50, 5, 'PRD005', 1);
+
+
+-- cargo Empleado
+CALL sp_agregarCargoEmpleado('Gerente', 'Responsable de la gestión');
+CALL sp_agregarCargoEmpleado('Asistente Administrativo', 'Brinda apoyo en tareas administrativas.');
+CALL sp_agregarCargoEmpleado('Analista de Ventas', 'Encargado de analizar ventas.');
+CALL sp_agregarCargoEmpleado('Técnico de Soporte', 'Proporciona asistencia técnica.');
+CALL sp_agregarCargoEmpleado('Contador', 'Encargado de llevar registros contables.');
+
+
+-- Empleado
+CALL sp_agregarEmpleados('Juan', 'Pérez', 1500.00, 'Calle Principal 123', 'Matutino', 1);
+CALL sp_agregarEmpleados('Ana', 'Gómez', 1600.00, 'Avenida Central 456', 'Vespertino', 2);
+CALL sp_agregarEmpleados('Pedro', 'Martínez', 1700.00, 'Calle Secundaria 789', 'Nocturno', 3);
+CALL sp_agregarEmpleados('María', 'López', 1800.00, 'Calle Lateral 101', 'Matutino', 4);
+CALL sp_agregarEmpleados('Luis', 'Rodríguez', 1900.00, 'Avenida Principal 111', 'Vespertino', 5);
+
+-- faturas
+CALL sp_agregarFactura('Pendiente', '2024-06-10', 1, 1);
+CALL sp_agregarFactura('Pagada', '2024-06-09', 2, 2);
+
+-- detalle Factura
+CALL sp_agregarDetalleFactura(2, 1, 'PRD001');
+CALL sp_agregarDetalleFactura(1, 1, 'PRD002');
+CALL sp_agregarDetalleFactura(1, 1, 'PRD003');
+CALL sp_agregarDetalleFactura(2, 1, 'PRD004');
+CALL sp_agregarDetalleFactura(2, 1, 'PRD005');

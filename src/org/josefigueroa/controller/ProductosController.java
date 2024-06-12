@@ -4,6 +4,8 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +25,7 @@ import org.josefigueroa.bean.Productos;
 import org.josefigueroa.bean.Proveedores;
 import org.josefigueroa.bean.TipoProducto;
 import org.josefigueroa.db.Conexion;
+import org.josefigueroa.report.GenerarReportes;
 import org.josefigueroa.system.Main;
 
 public class ProductosController implements Initializable {
@@ -469,8 +472,19 @@ public class ProductosController implements Initializable {
         }
     }
     
+    public void imprimirReporte(){
+        Map parametros= new HashMap();
+        
+        parametros.put("codigoProducto", null);
+        GenerarReportes.mostrarReportes("ReporteProductos.jasper", "Reporte de productos", parametros);
+        
+    }
+    
     public void reporte() {
         switch (tipoOperaciones) {
+            case NULL:
+                imprimirReporte();
+                break;
             case ACTUALIZAR:
                 imgEditar.setImage(new Image("/org/josefigueroa/images/editar.png"));
                 imgReporte.setImage(new Image("/org/josefigueroa/images/reporte.png"));
@@ -483,7 +497,7 @@ public class ProductosController implements Initializable {
                 limpiarControles();
                 tipoOperaciones = operaciones.NULL;
                 cargarDatos();
-            case NULL:
+            
                 break;
         }
     }
