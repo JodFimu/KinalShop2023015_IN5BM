@@ -56,12 +56,12 @@ create table Proveedores(
 );
 
 create table Productos(
-	codigoProducto varchar(15),
+	codigoProducto varchar(15) unique,
     descripcionProducto varchar(45),
     precioUnitario decimal(10,2),
     precioDocena decimal(10,2),
     precioMayor decimal(10,2),
-    imagenProducto varchar(45),
+    imagenProducto longblob,
     existencia int,
     tipoProducto int,
     proveedor int,

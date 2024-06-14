@@ -347,7 +347,7 @@ delimiter ;
 -- Productos
 -- agregar Productos
 delimiter $$
-create procedure sp_agregarProductos(in codProd varchar(15), in descrProducto varchar(45), in imgProd varchar(45), in tipoProd int, in prov int)
+create procedure sp_agregarProductos(in codProd varchar(15), in descrProducto varchar(45), in imgProd longblob, in tipoProd int, in prov int)
 begin
 	insert into Productos (codigoProducto,descripcionProducto,imagenProducto,tipoProducto,proveedor)
     values(codProd,descrProducto,imgProd,tipoProd,prov);
@@ -408,7 +408,7 @@ delimiter ;
 -- actualizar Productos
 delimiter $$
 create procedure sp_actualizarProductos(in codProd varchar(15), in descrProducto varchar(45),
-										in imgProd varchar(45), in tipoProd int, in prov int)
+										in imgProd longblob, in tipoProd int, in prov int)
 begin
 	update Productos 
 	set 
@@ -771,7 +771,7 @@ after update on Productos
 for each row
 	begin
 		call sp_actualizarPrecioDetalleFactura(new.codigoProducto,
-        (select new.precioUnitario from Productos where Productos.codigoProducto=new.codigoProducto limit 1));
+        (select new.precioUnitario from Productos where Productos.codigoProducto=new.codigoProducto));
         
 	end //
 delimiter ;
@@ -895,6 +895,8 @@ for each row
 	end //
 delimiter ;
 
+select sum(precioUnitario*cantidad) from DetalleFactura 
+					where numeroFactura=1;
 
 -- actualizar total factura
 delimiter //
@@ -904,9 +906,9 @@ for each row
 	begin
     declare total decimal(10,2);
     
-    set total=((select sum(new.precioUnitario*cantidad) from DetalleFactura where DetalleFactura.numeroFactura=new.numeroFactura ));
+    set total=((select sum(new.precioUnitario*cantidad) from DetalleFactura where DetalleFactura.numeroFactura=old.numeroFactura ));
     
-    call sp_actualizarFacturaTotal(new.numeroFactura, total);
+    call sp_actualizarFacturaTotal(old.numeroFactura, total);
                                     
 	end //
 delimiter ;
@@ -995,30 +997,6 @@ for each row
 delimiter ;
 
 
--- trigger
-delimiter //
-create trigger tr_eliminarExistenciasProductos_after_insert
-after insert on DetalleFactura
-for each row
-	begin
-		declare cant int;
-		
-        set cant= (select existencia from Productos where Productos.codigoProducto=new.codigoProducto);
-        
-        if new.cantidad>=cant then 
-			signal sqlstate "45000" set message_text = "supera el numero de existencias o no hay existencias";			 
-		else 
-			update Productos
-			set
-				Productos.existencia=new.cantidad-cant,
-				Productos.precioUnitario=new.precioUnitario
-			where
-				Productos.codigoProducto=new.codigoProducto;
-        end if;
-	end //
-delimiter ;
-
-drop trigger tr_eliminarExistenciasProductos_after_insert;
 
 
 -- clientes registros
@@ -1048,6 +1026,8 @@ CALL sp_agregarProductos('PRD002', 'Silla de oficina', 'chair.jpg', 2, 2);
 CALL sp_agregarProductos('PRD003', 'Camiseta deportiva', 'shirt.jpg', 3, 3);
 CALL sp_agregarProductos('PRD004', 'Libro de cocina', 'book.jpg', 4, 4);
 CALL sp_agregarProductos('PRD005', 'Juguete educativo', 'toy.jpg', 5, 5);
+
+call sp_listarProductos;
 
 -- compras
 CALL sp_agregarCompras('2024-06-10', 'Compra de suministros de oficina');
