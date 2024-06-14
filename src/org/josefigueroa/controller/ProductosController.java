@@ -4,11 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,8 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -161,6 +157,12 @@ public class ProductosController implements Initializable {
     @FXML MenuItem btnEmpleados;
     @FXML MenuItem btnFactura;
     @FXML MenuItem btnDetalleFactura;
+    
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -323,14 +325,12 @@ public class ProductosController implements Initializable {
     public void guardarProductos(){
         Productos registro = new Productos();
         
-        if (archivoSeleccionado
-                != null) {
+        if (archivoSeleccionado!= null) {
             try {
-                byte[] imageBytes = leerArchivo(archivoSeleccionado
-                );
+                byte[] imageBytes = leerArchivo(archivoSeleccionado );
                 registro.setImagenProducto(new SerialBlob(imageBytes));
             } catch (Exception e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Archivo no valido", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             registro.setImagenProducto(null);
@@ -348,10 +348,10 @@ public class ProductosController implements Initializable {
             procedimiento.setBlob(3, registro.getImagenProducto());
             procedimiento.setInt(4, registro.getTipoProducto());
             procedimiento.setInt(5, registro.getProveedor());
-            
+           
             procedimiento.execute();
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, "Codigo repetido", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -525,8 +525,7 @@ public class ProductosController implements Initializable {
                 Blob imagenBlob = new SerialBlob(imageBytes);
                 registro.setImagenProducto(imagenBlob);
             }catch(Exception e){
-                e.printStackTrace();
-            }
+                JOptionPane.showMessageDialog(null, "Archivo no valido", "Error", JOptionPane.ERROR_MESSAGE);               }
         }
         
         try{
@@ -555,7 +554,7 @@ public class ProductosController implements Initializable {
     public void reporte() {
         switch (tipoOperaciones) {
             case NULL:
-                imprimirReporte();
+                //imprimirReporte();
                 break;
             case ACTUALIZAR:
                 imgEditar.setImage(new Image("/org/josefigueroa/images/editar.png"));
@@ -603,6 +602,16 @@ public class ProductosController implements Initializable {
         }else if(event.getSource()==btnDetalleFactura){
             escenarioPrincipal.DetalleFacturaView();
         }
+    if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+    }
+    
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
     }
     
     public void abrirImagen(Stage stage) {

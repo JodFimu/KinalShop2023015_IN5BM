@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.Compras;
 import org.josefigueroa.bean.DetalleCompra;
@@ -103,6 +104,12 @@ public class DetalleCompraController implements Initializable {
     @FXML
     private ComboBox cbxNumDoc;
     
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
+    
     @FXML MenuItem btnMenuClientes;
     @FXML MenuItem btnProgramador; 
     @FXML MenuItem btnTipoProducto;
@@ -110,7 +117,6 @@ public class DetalleCompraController implements Initializable {
     @FXML MenuItem btnCargoEmpleado;
     @FXML MenuItem btnProveedores;
     @FXML MenuItem btnProductos;
-    @FXML MenuItem btnDetCompra;
     @FXML MenuItem btnEmpleados;
     @FXML MenuItem btnFactura;
     @FXML MenuItem btnDetalleFactura;
@@ -263,20 +269,29 @@ public class DetalleCompraController implements Initializable {
         DetalleCompra registro = new DetalleCompra();
         registro.setCodigoProducto(((Productos) cbxProducto.getSelectionModel().getSelectedItem()).getCodigoProducto());
         registro.setNumeroDocumento(((Compras) cbxNumDoc.getSelectionModel().getSelectedItem()).getNumeroDocumento());
-        registro.setCostoUnitario(Double.parseDouble(txtCostUnit.getText()));
-        registro.setCantidad(Integer.parseInt(txtCant.getText()));
         
-        try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarDetalleCompra(?,?,?,?)}");
-            procedimiento.setDouble(1, registro.getCostoUnitario());
-            procedimiento.setInt(2, registro.getCantidad());
-            procedimiento.setString(3, registro.getCodigoProducto());
-            procedimiento.setInt(4, registro.getNumeroDocumento());
+        try {
+            registro.setCostoUnitario(Double.parseDouble(txtCostUnit.getText()));
+            registro.setCantidad(Integer.parseInt(txtCant.getText()));
             
-            procedimiento.execute();
-        }catch(Exception e){
-            e.printStackTrace();
+            try {
+                PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarDetalleCompra(?,?,?,?)}");
+
+                procedimiento.setString(3, registro.getCodigoProducto());
+                procedimiento.setInt(4, registro.getNumeroDocumento());
+                procedimiento.setDouble(1, registro.getCostoUnitario());
+                procedimiento.setInt(2, registro.getCantidad());
+
+                procedimiento.execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Los valores de Cantidad y Costo Unitario solo pueden ser numeros", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
+        
+        
     }
     
     public void seleccionarTupla() {
@@ -423,23 +438,30 @@ public class DetalleCompraController implements Initializable {
         registro.setCodigoDetalleCompra(Integer.parseInt(txtCod.getText()));
         registro.setCodigoProducto(((Productos) cbxProducto.getSelectionModel().getSelectedItem()).getCodigoProducto());
         registro.setNumeroDocumento(((Compras) cbxNumDoc.getSelectionModel().getSelectedItem()).getNumeroDocumento());
-        registro.setCostoUnitario(Double.parseDouble(txtCostUnit.getText()));
-        registro.setCantidad(Integer.parseInt(txtCant.getText()));
-        
-        
-        try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarDetalleCompra(?,?,?,?,?)}");
-            procedimiento.setInt(1, registro.getCodigoDetalleCompra());
-            procedimiento.setDouble(2, registro.getCostoUnitario());
-            procedimiento.setInt(3, registro.getCantidad());
-            procedimiento.setString(4, registro.getCodigoProducto());
-            procedimiento.setInt(5, registro.getNumeroDocumento());
-            procedimiento.execute();
+        try {
+            registro.setCostoUnitario(Double.parseDouble(txtCostUnit.getText()));
+            registro.setCantidad(Integer.parseInt(txtCant.getText()));
             
-            listarDetalleCompra.add(registro);
-        }catch(Exception e){
-            e.printStackTrace();
+            try {
+                PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarDetalleCompra(?,?,?,?,?)}");
+                procedimiento.setInt(1, registro.getCodigoDetalleCompra());
+                procedimiento.setDouble(2, registro.getCostoUnitario());
+                procedimiento.setInt(3, registro.getCantidad());
+                procedimiento.setString(4, registro.getCodigoProducto());
+                procedimiento.setInt(5, registro.getNumeroDocumento());
+                procedimiento.execute();
+
+                listarDetalleCompra.add(registro);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Los valores de Cantidad y Costo Unitario solo pueden ser numeros", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
+        
+        
     }
     
     public void reporte() {
@@ -490,5 +512,15 @@ public class DetalleCompraController implements Initializable {
         }else if(event.getSource()==btnDetalleFactura){
             escenarioPrincipal.DetalleFacturaView();
         }
+    if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+    }
+    
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
     }
 }

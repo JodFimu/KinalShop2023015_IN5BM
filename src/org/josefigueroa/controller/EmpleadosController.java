@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.CargoEmpleado;
 import org.josefigueroa.bean.Empleados;
@@ -128,6 +129,12 @@ public class EmpleadosController implements Initializable {
     @FXML MenuItem btnDetCompra;
     @FXML MenuItem btnFactura;
     @FXML MenuItem btnDetalleFactura;
+    
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -259,24 +266,28 @@ public class EmpleadosController implements Initializable {
         Empleados registro = new Empleados();
         registro.setNombresEmpleado(txtNom.getText());
         registro.setApellidosEmpleado(txtApe.getText());
-        registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
+        
         registro.setDireccion(txtDireccion.getText());
         registro.setTurno(txtTurno.getText());
         registro.setCodigoCargoEmpleado(((CargoEmpleado) cbxCargo.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado());
 
-        
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarEmpleados(?,?,?,?,?,?)}");
-            procedimiento.setString(1, registro.getNombresEmpleado());
-            procedimiento.setString(2, registro.getApellidosEmpleado());
-            procedimiento.setDouble(3, registro.getSueldo());
-            procedimiento.setString(4, registro.getDireccion());
-            procedimiento.setString(5, registro.getTurno());
-            procedimiento.setInt(6, registro.getCodigoCargoEmpleado());
-            
-            procedimiento.execute();
+            registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
+            try{
+                PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarEmpleados(?,?,?,?,?,?)}");
+                procedimiento.setString(1, registro.getNombresEmpleado());
+                procedimiento.setString(2, registro.getApellidosEmpleado());
+                procedimiento.setDouble(3, registro.getSueldo());
+                procedimiento.setString(4, registro.getDireccion());
+                procedimiento.setString(5, registro.getTurno());
+                procedimiento.setInt(6, registro.getCodigoCargoEmpleado());
+
+                procedimiento.execute();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }catch(Exception e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Sueldo solo puede ser un numero", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -303,7 +314,7 @@ public class EmpleadosController implements Initializable {
            
            while(registro.next()){
                result=new CargoEmpleado(registro.getInt("codigoCargoEmpleado"),
-                                        registro.getString("descripcion"),
+                                        registro.getString("nombreCargo"),
                                     registro.getString("descripcionCargo"));
 
            }
@@ -393,25 +404,30 @@ public class EmpleadosController implements Initializable {
         Empleados registro = (Empleados)tblEmpleados.getSelectionModel().getSelectedItem();
         registro.setNombresEmpleado(txtNom.getText());
         registro.setApellidosEmpleado(txtApe.getText());
-        registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
+        
         registro.setDireccion(txtDireccion.getText());
         registro.setTurno(txtTurno.getText());
         registro.setCodigoCargoEmpleado(((CargoEmpleado) cbxCargo.getSelectionModel().getSelectedItem()).getCodigoCargoEmpleado());
         
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarEmpleados(?,?,?,?,?)}");
-            procedimiento.setInt(1, registro.getCodigoEmpleado());
-            procedimiento.setString(2, registro.getNombresEmpleado());
-            procedimiento.setString(3, registro.getApellidosEmpleado());
-            procedimiento.setDouble(4, registro.getSueldo());
-            procedimiento.setString(5, registro.getDireccion());
-            procedimiento.setString(6, registro.getTurno());
-            procedimiento.setInt(7, registro.getCodigoCargoEmpleado());
-            procedimiento.execute();
-            
-            listarEmpleados.add(registro);
+            registro.setSueldo(Double.parseDouble(txtSueldo.getText()));
+            try{
+                PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarEmpleados(?,?,?,?,?)}");
+                procedimiento.setInt(1, registro.getCodigoEmpleado());
+                procedimiento.setString(2, registro.getNombresEmpleado());
+                procedimiento.setString(3, registro.getApellidosEmpleado());
+                procedimiento.setDouble(4, registro.getSueldo());
+                procedimiento.setString(5, registro.getDireccion());
+                procedimiento.setString(6, registro.getTurno());
+                procedimiento.setInt(7, registro.getCodigoCargoEmpleado());
+                procedimiento.execute();
+
+                listarEmpleados.add(registro);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }catch(Exception e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Sueldo solo puede ser un numero", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -464,5 +480,15 @@ public class EmpleadosController implements Initializable {
         }else if(event.getSource()==btnDetalleFactura){
             escenarioPrincipal.DetalleFacturaView();
         }
+    if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+    }
+    
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
     }
 }

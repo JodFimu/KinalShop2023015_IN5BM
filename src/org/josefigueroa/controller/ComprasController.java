@@ -22,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.Compras;
 import org.josefigueroa.db.Conexion;
@@ -95,10 +96,15 @@ public class ComprasController implements Initializable {
     @FXML
     private DatePicker dpFecha;
     
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
+    
     @FXML MenuItem btnMenuClientes;
     @FXML MenuItem btnProgramador; 
     @FXML MenuItem btnTipoProducto;
-    @FXML MenuItem btnCompras;
     @FXML MenuItem btnCargoEmpleado;
     @FXML MenuItem btnProveedores;
     @FXML MenuItem btnProductos;
@@ -129,7 +135,6 @@ public class ComprasController implements Initializable {
     }
 
     public void activarControles() {
-        txtNumeroDoc.setEditable(false);
         dpFecha.setEditable(true);
         txtDescr.setEditable(true);
     }
@@ -198,7 +203,20 @@ public class ComprasController implements Initializable {
         }else if(event.getSource()==btnDetalleFactura){
             escenarioPrincipal.DetalleFacturaView();
         }
+        
+        if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
     }
+    
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
+    }
+    
+    
     
     public void agregarCompras() {
         switch (tipoOperaciones) {
@@ -208,14 +226,13 @@ public class ComprasController implements Initializable {
                 btnAgregar.setText("Guardar");
                 imgAgregar.setImage(new Image("/org/josefigueroa/images/guardar.png"));
                 imgEliminar.setImage(new Image("/org/josefigueroa/images/cancelar.png"));
-                txtNumeroDoc.setEditable(false);
                 btnReporte.setDisable(true);
                 btnEditar.setDisable(true);
                 btnInicio.setDisable(true);
                 tipoOperaciones = operaciones.ACTUALIZAR;
                 break;
             case ACTUALIZAR:
-                 guardarCompras();
+                guardarCompras();
                 cargarDatos();
                 desactivarControles();
                 limpiarControles();
@@ -224,7 +241,7 @@ public class ComprasController implements Initializable {
                 imgAgregar.setImage(new Image("/org/josefigueroa/images/agregar.png"));
                 imgEliminar.setImage(new Image("/org/josefigueroa/images/eliminar.png"));  
                 btnInicio.setDisable(false);
-                txtNumeroDoc.setEditable(true);
+                txtNumeroDoc.setEditable(false);
                 btnReporte.setDisable(false);
                 btnEditar.setDisable(false);
                 
@@ -235,18 +252,25 @@ public class ComprasController implements Initializable {
     
     public void guardarCompras() {
         Compras registro = new Compras();
-        registro.setFechaDocumento(dpFecha.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        
         registro.setDescripcion(txtDescr.getText());
 
-        try {
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarCompras(?, ?)}");
-            procedimiento.setString(1, registro.getFechaDocumento());
-            procedimiento.setString(2, registro.getDescripcion());
+        try{
+            registro.setFechaDocumento(dpFecha.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            
+            try {
+                
+                PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarCompras(?, ?)}");
+                procedimiento.setString(1, registro.getFechaDocumento());
+                procedimiento.setString(2, registro.getDescripcion());
 
-            procedimiento.execute();
-            listarCompras.add(registro);
-        } catch (Exception e) {
-            e.printStackTrace();
+                procedimiento.execute();
+                listarCompras.add(registro);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Fecha no valida", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -334,21 +358,25 @@ public class ComprasController implements Initializable {
     
     public void actualizar(){
         Compras registro = (Compras)tblCompras.getSelectionModel().getSelectedItem();
-        registro.setFechaDocumento(dpFecha.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         registro.setDescripcion(txtDescr.getText());
         registro.setTotalDocumento(parseDouble(txtTotal.getText()));
 
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarCompras(?,?,?)}");
-            procedimiento.setInt(1, registro.getNumeroDocumento());
-            procedimiento.setString(2, registro.getFechaDocumento());
-            procedimiento.setString(3, registro.getDescripcion());
+            registro.setFechaDocumento(dpFecha.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            try{
+                PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarCompras(?,?,?)}");
+                procedimiento.setInt(1, registro.getNumeroDocumento());
+                procedimiento.setString(2, registro.getFechaDocumento());
+                procedimiento.setString(3, registro.getDescripcion());
 
 
-            procedimiento.execute();
-             listarCompras.add(registro);
+                procedimiento.execute();
+                 listarCompras.add(registro);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }catch(Exception e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Fecha no valida", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     

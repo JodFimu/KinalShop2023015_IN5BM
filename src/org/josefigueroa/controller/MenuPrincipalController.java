@@ -5,7 +5,9 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
 import org.josefigueroa.system.Main;
 
 /**
@@ -25,6 +27,12 @@ public class MenuPrincipalController implements Initializable{
     @FXML MenuItem btnEmpleados;
     @FXML MenuItem btnFactura;
     @FXML MenuItem btnDetalleFactura;
+    
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -60,6 +68,17 @@ public class MenuPrincipalController implements Initializable{
         }else if(event.getSource()==btnDetalleFactura){
             escenarioPrincipal.DetalleFacturaView();
         }
+        
+        if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+    }
+    
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
     }
     
 

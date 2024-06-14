@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.DetalleFactura;
 import org.josefigueroa.bean.Factura;
@@ -114,6 +115,12 @@ public class DetalleFacturaController implements Initializable {
     @FXML MenuItem btnEmpleados;
     @FXML MenuItem btnFactura;
     @FXML MenuItem btnDetalleFactura;
+    
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -264,18 +271,26 @@ public class DetalleFacturaController implements Initializable {
         DetalleFactura registro = new DetalleFactura();
         registro.setCodigoProducto(((Productos) cbxProd.getSelectionModel().getSelectedItem()).getCodigoProducto());
         registro.setNumeroFactura(((Factura) cbxNumFact.getSelectionModel().getSelectedItem()).getNumeroFactura());
-        registro.setCantidad(Integer.parseInt(txtCant.getText()));
         
         try{
+            registro.setCantidad(Integer.parseInt(txtCant.getText()));
+            
+            try{
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarDetalleFactura(?,?,?)}");
             procedimiento.setInt(1, registro.getCantidad());
             procedimiento.setInt(2, registro.getNumeroFactura());
             procedimiento.setString(3, registro.getCodigoProducto());
             
             procedimiento.execute();
+            
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }catch(Exception e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Cantidad solo puede ser un numero ", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
+        
     }
     
     public void seleccionarTupla() {
@@ -421,22 +436,30 @@ public class DetalleFacturaController implements Initializable {
         
         registro.setCodigoProducto(((Productos) cbxProd.getSelectionModel().getSelectedItem()).getCodigoProducto());
         registro.setNumeroFactura(((Factura) cbxNumFact.getSelectionModel().getSelectedItem()).getNumeroFactura());
-        registro.setCantidad(Integer.parseInt(txtCant.getText()));
         
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarDetalleFactura(?,?,?,?,?)}");
-            procedimiento.setInt(1, registro.getCodigoDetalleFactura());
-            procedimiento.setDouble(2, registro.getPrecioUnitario());
-            procedimiento.setInt(3, registro.getCantidad());
-            procedimiento.setInt(4, registro.getNumeroFactura());
-            procedimiento.setString(5, registro.getCodigoProducto());
+            registro.setCantidad(Integer.parseInt(txtCant.getText()));
             
-            procedimiento.execute();
-            
-            listarDetalleFactura.add(registro);
+            try {
+                PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarDetalleFactura(?,?,?,?,?)}");
+                procedimiento.setInt(1, registro.getCodigoDetalleFactura());
+                procedimiento.setDouble(2, registro.getPrecioUnitario());
+                procedimiento.setInt(3, registro.getCantidad());
+                procedimiento.setInt(4, registro.getNumeroFactura());
+                procedimiento.setString(5, registro.getCodigoProducto());
+
+                procedimiento.execute();
+
+                listarDetalleFactura.add(registro);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }catch(Exception e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Cantidad solo puede ser un numero ", "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
+        
+        
     }
     
     
@@ -488,8 +511,16 @@ public class DetalleFacturaController implements Initializable {
             escenarioPrincipal.EmpleadosView();
         }else if(event.getSource()==btnFactura){
             escenarioPrincipal.FacturaView();
-        }else if(event.getSource()==btnDetalleFactura){
-            escenarioPrincipal.DetalleFacturaView();
         }
+    if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+    }
+    
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
     }
 }

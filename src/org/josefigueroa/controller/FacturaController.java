@@ -24,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.Clientes;
 import org.josefigueroa.bean.Empleados;
@@ -125,6 +126,12 @@ public class FacturaController implements Initializable {
     @FXML MenuItem btnDetCompra;
     @FXML MenuItem btnEmpleados;
     @FXML MenuItem btnDetalleFactura;
+    
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -277,21 +284,24 @@ public class FacturaController implements Initializable {
     
     public void guardarFactura(){
         Factura registro = new Factura();
-        registro.setFechaFactura(dpFecha.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         registro.setCodigoCliente(((Clientes) cbxCliente.getSelectionModel().getSelectedItem()).getCodigoCliente());
         registro.setCodigoEmpleado(((Empleados) cbxEmpleado.getSelectionModel().getSelectedItem()).getCodigoEmpleado());
         registro.setEstado(txtEstado.getText());
-        
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarFactura(?,?,?,?)}");
-            procedimiento.setString(1, registro.getEstado());
-            procedimiento.setString(2, registro.getFechaFactura());
-            procedimiento.setInt(3, registro.getCodigoCliente());
-            procedimiento.setInt(4, registro.getCodigoEmpleado());
-            
-            procedimiento.execute();
+            registro.setFechaFactura(dpFecha.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            try{
+                PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarFactura(?,?,?,?)}");
+                procedimiento.setString(1, registro.getEstado());
+                procedimiento.setString(2, registro.getFechaFactura());
+                procedimiento.setInt(3, registro.getCodigoCliente());
+                procedimiento.setInt(4, registro.getCodigoEmpleado());
+
+                procedimiento.execute();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }catch(Exception e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Fecha no valida", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -435,26 +445,31 @@ public class FacturaController implements Initializable {
     public void actualizar(){
         Factura registro = (Factura)tblFactura.getSelectionModel().getSelectedItem();
         
-        registro.setFechaFactura(dpFecha.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         registro.setCodigoCliente(((Clientes) cbxCliente.getSelectionModel().getSelectedItem()).getCodigoCliente());
         registro.setCodigoEmpleado(((Empleados) cbxEmpleado.getSelectionModel().getSelectedItem()).getCodigoEmpleado());
         registro.setEstado(txtEstado.getText());
         registro.setTotalFactura(Double.parseDouble(txtTotal.getText()));
         
         try{
-            PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarFactura(?,?,?,?,?,?)}");
-            procedimiento.setInt(1, registro.getNumeroFactura());
-            procedimiento.setString(2, registro.getEstado());
-            procedimiento.setDouble(3, registro.getTotalFactura());
-            procedimiento.setString(4, registro.getFechaFactura());
-            procedimiento.setInt(5, registro.getCodigoCliente());
-            procedimiento.setInt(6, registro.getCodigoEmpleado());
-            
-            procedimiento.execute();
-            
-            listarFactura.add(registro);
+           registro.setFechaFactura(dpFecha.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+            try{
+                PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarFactura(?,?,?,?,?,?)}");
+                procedimiento.setInt(1, registro.getNumeroFactura());
+                procedimiento.setString(2, registro.getEstado());
+                procedimiento.setDouble(3, registro.getTotalFactura());
+                procedimiento.setString(4, registro.getFechaFactura());
+                procedimiento.setInt(5, registro.getCodigoCliente());
+                procedimiento.setInt(6, registro.getCodigoEmpleado());
+
+                procedimiento.execute();
+
+                listarFactura.add(registro);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }catch(Exception e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Fecha no valida", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -462,8 +477,9 @@ public class FacturaController implements Initializable {
     public void imprimirReporte(){
         Map parametros = new HashMap();
         
-        
         int IDFact = Integer.valueOf(((Factura) tblFactura.getSelectionModel().getSelectedItem()).getNumeroFactura());
+        
+        
         parametros.put("IDFact", IDFact);
         
         GenerarReportes.mostrarReportes("Factura.jasper", "Factura", parametros);
@@ -472,7 +488,12 @@ public class FacturaController implements Initializable {
     public void reporte() {
         switch (tipoOperaciones) {
             case NULL:
-                imprimirReporte();
+                try {
+                    imprimirReporte();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Seleccione una factura", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                tipoOperaciones = operaciones.ACTUALIZAR;
                 break;
             case ACTUALIZAR:
                 imgEditar.setImage(new Image("/org/josefigueroa/images/editar.png"));
@@ -520,5 +541,15 @@ public class FacturaController implements Initializable {
         }else if(event.getSource()==btnDetalleFactura){
             escenarioPrincipal.DetalleFacturaView();
         }
+    if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+    }
+    
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
     }
 }

@@ -158,7 +158,7 @@
                </font></Text>
          </children>
       </GridPane>
-      <MenuBar prefHeight="32.0" prefWidth="1066.0" styleClass="menubar" stylesheets="@../resource/KinalShopCSS.css">
+      <MenuBar prefHeight="32.0" prefWidth="957.0" styleClass="menubar" stylesheets="@../resource/KinalShopCSS.css">
          <menus>
             <Menu mnemonicParsing="false" text="Clientes">
                <items>
@@ -168,7 +168,6 @@
             <Menu mnemonicParsing="false" text="Facturas">
                <items>
                   <MenuItem fx:id="btnFactura" mnemonicParsing="false" onAction="#handleButtonAction" text="Facturas" />
-                  <MenuItem fx:id="btnDetalleFactura" mnemonicParsing="false" onAction="#handleButtonAction" text="Detalle Facturas" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Compras">
@@ -192,10 +191,28 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Ayuda">
                <items>
-                  <MenuItem fx:id="btnProgramador2" mnemonicParsing="false" onAction="#handleButtonAction" text="Información del programa" />
+                  <MenuItem fx:id="btnProgramador" mnemonicParsing="false" onAction="#handleButtonAction" text="Información del programa" />
                </items>
             </Menu>
          </menus>
       </MenuBar>
+      <Button fx:id="btnCerrar" layoutX="1020.0" layoutY="-2.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="31.0" prefWidth="35.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css">
+         <graphic>
+            <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/cerrar.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btnMin" layoutX="974.0" layoutY="-2.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="31.0" prefWidth="35.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css">
+         <graphic>
+            <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/minimizar.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

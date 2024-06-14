@@ -751,30 +751,7 @@ for each row
 	end //
 delimiter ;
 
--- actualizar DetalleFactura
-delimiter $$
-create procedure sp_actualizarPrecioDetalleFactura(in codProd varchar(15), in precUnit decimal(10,2) )
-begin
-	update DetalleFactura 
-	set 
-		DetalleFactura.precioUnitario=precUnit
-    where
-		DetalleFactura.codigoProducto=codProd;
-end $$
-delimiter ;
 
-
--- actualizar Precios Detalle factura
-delimiter //
-create trigger tr_actualizarPreciosDetalleFactura_after_update
-after update on Productos
-for each row
-	begin
-		call sp_actualizarPrecioDetalleFactura(new.codigoProducto,
-        (select new.precioUnitario from Productos where Productos.codigoProducto=new.codigoProducto));
-        
-	end //
-delimiter ;
 
 
 -- insertar precios en Productos

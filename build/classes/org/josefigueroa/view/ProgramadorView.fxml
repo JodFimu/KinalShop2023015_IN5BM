@@ -1,22 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: FDE767;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.josefigueroa.controller.ProgramadorController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="684.0" prefWidth="1011.0" style="-fx-background-color: FDE767;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.josefigueroa.controller.ProgramadorController">
    <children>
-      <ImageView fitHeight="176.0" fitWidth="155.0" layoutX="37.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+      <TextField editable="false" layoutX="21.0" layoutY="497.0" prefHeight="31.0" prefWidth="212.0" style="-fx-background-color: FDE767;" text="José David Figueroa Muñoz" />
+      <TextField editable="false" layoutX="21.0" layoutY="536.0" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: FDE767;" text="Carné: 2023015" />
+      <TextField editable="false" layoutX="21.0" layoutY="574.0" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: FDE767;" text="IN5BM" />
+      <MenuBar layoutY="-2.0" prefHeight="32.0" prefWidth="1011.0" styleClass="menubar" stylesheets="@../resource/KinalShopCSS.css">
+         <menus>
+            <Menu mnemonicParsing="false" text="Clientes">
+               <items>
+                  <MenuItem fx:id="btnMenuClientes" mnemonicParsing="false" onAction="#handleButtonAction" text="Clientes" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Facturas">
+               <items>
+                  <MenuItem fx:id="btnFactura" mnemonicParsing="false" onAction="#handleButtonAction" text="Facturas" />
+                  <MenuItem fx:id="btnDetalleFactura" mnemonicParsing="false" onAction="#handleButtonAction" text="Detalle Facturas" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Compras">
+               <items>
+                  <MenuItem fx:id="btnCompras" mnemonicParsing="false" onAction="#handleButtonAction" text="Compras" />
+                  <MenuItem fx:id="btnDetCompra" mnemonicParsing="false" onAction="#handleButtonAction" text="DetalleCompra" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Personal">
+               <items>
+                  <MenuItem fx:id="btnEmpleados" mnemonicParsing="false" onAction="#handleButtonAction" text="Empleados" />
+                  <MenuItem fx:id="btnCargoEmpleado" mnemonicParsing="false" onAction="#handleButtonAction" text="Cargos de empleados" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Productos">
+               <items>
+                  <MenuItem fx:id="btnProductos" mnemonicParsing="false" onAction="#handleButtonAction" text="Productos" />
+                  <MenuItem fx:id="btnTipoProducto" mnemonicParsing="false" onAction="#handleButtonAction" text="Tipos de productos" />
+                  <MenuItem fx:id="btnProveedores" mnemonicParsing="false" onAction="#handleButtonAction" text="Proveedores" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <Button fx:id="btnInicio" layoutX="56.0" layoutY="605.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="37.0" prefWidth="101.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css">
+         <graphic>
+            <ImageView fx:id="imgInicio" fitHeight="37.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/inicio.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <ImageView fitHeight="456.0" fitWidth="1011.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/foto.jpg" />
+            <Image url="@../images/imgAyuda.png" />
          </image>
       </ImageView>
-      <TextField editable="false" layoutX="37.0" layoutY="207.0" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: FDE767;" text="José David Figueroa Muñoz" />
-      <TextField editable="false" layoutX="37.0" layoutY="246.0" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: FDE767;" text="Carné: 2023015" />
-      <TextField editable="false" layoutX="37.0" layoutY="284.0" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: FDE767;" text="IN5BM" />
-      <TextField editable="false" layoutX="37.0" layoutY="322.0" prefHeight="25.0" prefWidth="487.0" style="-fx-background-color: FDE767;" text="Ingrese a la carrera de informatica porque me interesaba el desarrollo de videojuegos." />
-      <Button fx:id="btnRegresar" layoutX="534.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleButtonAction" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css" text="Regresar" />
    </children>
 </AnchorPane>

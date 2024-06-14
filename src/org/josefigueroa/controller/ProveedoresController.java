@@ -20,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.Proveedores;
 import org.josefigueroa.db.Conexion;
@@ -126,6 +127,12 @@ public class ProveedoresController implements Initializable {
     @FXML MenuItem btnEmpleados;
     @FXML MenuItem btnFactura;
     @FXML MenuItem btnDetalleFactura;
+    
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -240,6 +247,16 @@ public class ProveedoresController implements Initializable {
         }else if(event.getSource()==btnDetalleFactura){
             escenarioPrincipal.DetalleFacturaView();
         }
+    if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+    }
+    
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
     }
     
     public void agregarProveedores() {
@@ -290,7 +307,7 @@ public class ProveedoresController implements Initializable {
             procedimiento.setString(1, registro.getNITProveedor());
             procedimiento.setString(2, registro.getNombresProveedor());
             procedimiento.setString(3, registro.getApellidosProveedor());
-             procedimiento.setString(4, registro.getDireccionProveedor());           
+            procedimiento.setString(4, registro.getDireccionProveedor());           
             procedimiento.setString(5, registro.getRazonSocial());
             procedimiento.setString(6, registro.getContactoPrincipal());
             procedimiento.setString(7, registro.getPaginaWeb());
@@ -426,7 +443,7 @@ public class ProveedoresController implements Initializable {
         switch (tipoOperaciones) {
             
             case NULL:
-                imprimirReporte();
+                //imprimirReporte();
                 break;
             case ACTUALIZAR:
                 imgEditar.setImage(new Image("/org/josefigueroa/images/editar.png"));

@@ -20,6 +20,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.Clientes;
 import org.josefigueroa.db.Conexion;
@@ -85,8 +86,14 @@ public class ClientesMenuController implements Initializable {
     @FXML
     private ImageView imgReporte;
     @FXML
-    private ImageView imgEditar;   
-    @FXML MenuItem btnMenuClientes;
+    private ImageView imgEditar;  
+    
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
+    
     @FXML MenuItem btnProgramador; 
     @FXML MenuItem btnTipoProducto;
     @FXML MenuItem btnCompras;
@@ -205,8 +212,19 @@ public class ClientesMenuController implements Initializable {
         }else if(event.getSource()==btnDetalleFactura){
             escenarioPrincipal.DetalleFacturaView();
         }
+        
+        if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
     }
 
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
+    }
+    
     public void agregarClientes() {
         switch (tipoOperaciones) {
             case NULL:
@@ -363,7 +381,7 @@ public class ClientesMenuController implements Initializable {
     public void reporte() {
         switch (tipoOperaciones) {
             case NULL:
-                imprimirReporte();
+                //imprimirReporte();
                 break;
             case ACTUALIZAR:
                 imgEditar.setImage(new Image("/org/josefigueroa/images/editar.png"));

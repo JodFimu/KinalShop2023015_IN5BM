@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.josefigueroa.controller.CargoEmpleadoController;
 import org.josefigueroa.controller.ClientesMenuController;
 import org.josefigueroa.controller.ComprasController;
@@ -33,9 +34,11 @@ public class Main extends Application {
     @Override
     public void start(Stage escenarioPrincipal) throws Exception {
         this.escenarioPrincipal=escenarioPrincipal;
+        escenarioPrincipal.initStyle(StageStyle.UNDECORATED);
         this.escenarioPrincipal.setTitle("Kinal Shop");
         escenarioPrincipal.getIcons().add(new Image("/org/josefigueroa/images/Logo.png"));
         menuPrincipalView();
+        
         escenarioPrincipal.show();
     }
 
@@ -85,7 +88,7 @@ public class Main extends Application {
     
     public void ProgramadorView(){
         try{
-            ProgramadorController programadorView = (ProgramadorController) cambiarEscena("ProgramadorView.fxml", 600, 400);
+            ProgramadorController programadorView = (ProgramadorController) cambiarEscena("ProgramadorView.fxml", 1011, 684);
             programadorView.setEscenarioPrincipal(this);
         }catch(Exception e){
             e.printStackTrace();

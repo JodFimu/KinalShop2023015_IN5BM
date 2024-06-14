@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.CargoEmpleado;
 import org.josefigueroa.db.Conexion;
@@ -82,6 +83,12 @@ public class CargoEmpleadoController implements Initializable {
 
     @FXML
     private ImageView imgInicio;
+    
+    @FXML
+    private Button btnCerrar;
+
+    @FXML
+    private Button btnMin;
     
     @FXML MenuItem btnMenuClientes;
     @FXML MenuItem btnProgramador; 
@@ -193,6 +200,17 @@ public class CargoEmpleadoController implements Initializable {
         }else if(event.getSource()==btnDetalleFactura){
             escenarioPrincipal.DetalleFacturaView();
         }
+        
+        if (event.getSource() == btnMin) {
+            Stage stage = (Stage) btnMin.getScene().getWindow();
+            minimizeStage(stage);
+        } else if (event.getSource() == btnCerrar) {
+            System.exit(0);
+        }
+    }
+    
+    private void minimizeStage(Stage stage) {
+        stage.setIconified(true);
     }
     
     public void agregarCargoEmpleado() {
