@@ -1,6 +1,8 @@
 
 package org.josefigueroa.bean;
 
+import java.sql.Blob;
+
 
 public class Productos {
     
@@ -9,7 +11,7 @@ public class Productos {
     private double precioUnitario;
     private double precioDocena;
     private double precioMayor;
-    private String imagenProducto;
+    private Blob imagenProducto;
     private int existencia;
     private int tipoProducto;
     private int proveedor;
@@ -17,7 +19,7 @@ public class Productos {
     public Productos() {
     }
 
-    public Productos(String codigoProducto, String descripcionProducto, double precioUnitario, double precioDocena, double precioMayor, String imagenProducto, int existencia, int tipoProducto, int proveedor) {
+    public Productos(String codigoProducto, String descripcionProducto, double precioUnitario, double precioDocena, double precioMayor, Blob imagenProducto, int existencia, int tipoProducto, int proveedor) {
         this.codigoProducto = codigoProducto;
         this.descripcionProducto = descripcionProducto;
         this.precioUnitario = precioUnitario;
@@ -29,7 +31,7 @@ public class Productos {
         this.proveedor = proveedor;
     }
 
-    public Productos(String codigoProducto, String descripcionProducto, String imagenProducto, int tipoProducto, int proveedor) {
+    public Productos(String codigoProducto, String descripcionProducto, Blob imagenProducto, int tipoProducto, int proveedor) {
         this.codigoProducto = codigoProducto;
         this.descripcionProducto = descripcionProducto;
         this.imagenProducto = imagenProducto;
@@ -79,11 +81,11 @@ public class Productos {
         this.precioMayor = precioMayor;
     }
 
-    public String getImagenProducto() {
+    public Blob getImagenProducto() {
         return imagenProducto;
     }
 
-    public void setImagenProducto(String imagenProducto) {
+    public void setImagenProducto(Blob imagenProducto) {
         this.imagenProducto = imagenProducto;
     }
 

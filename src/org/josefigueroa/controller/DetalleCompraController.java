@@ -191,7 +191,7 @@ public class DetalleCompraController implements Initializable {
                                                         resultado.getDouble("precioUnitario"),
                                                         resultado.getDouble("precioDocena"),
                                                         resultado.getDouble("precioMayor"),
-                                                        resultado.getString("imagenProducto"),
+                                                        resultado.getBlob("imagenProducto"),
                                                         resultado.getInt("existencia"), 
                                                         resultado.getInt("tipoProducto"),
                                                         resultado.getInt("proveedor")));
@@ -329,7 +329,7 @@ public class DetalleCompraController implements Initializable {
                         registro.getDouble("precioUnitario"),
                         registro.getDouble("precioDocena"),
                         registro.getDouble("precioMayor"),
-                        registro.getString("imagenProducto"),
+                        registro.getBlob("imagenProducto"),
                         registro.getInt("existencia"),
                         registro.getInt("tipoProducto"),
                         registro.getInt("proveedor"));

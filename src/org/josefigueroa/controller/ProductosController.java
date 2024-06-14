@@ -1,12 +1,24 @@
 package org.josefigueroa.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +33,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.JOptionPane;
 import org.josefigueroa.bean.Productos;
 import org.josefigueroa.bean.Proveedores;
@@ -36,12 +51,15 @@ public class ProductosController implements Initializable {
     private ObservableList<Proveedores> listarProveedores;
     private ObservableList<TipoProducto> listarTipoProducto;
 
+    
 
     private enum operaciones {
         AGREGAR, EDITAR, ACTUALIZAR, ELIMINAR, CANCELAR, NULL
     }
 
     private operaciones tipoOperaciones = operaciones.NULL;
+    
+    private File archivoSeleccionado;
     
      @FXML
     private Button btnAgregar;
@@ -71,7 +89,7 @@ public class ProductosController implements Initializable {
     private Button btnInicio;
 
     @FXML
-    private ImageView imgInicio;
+    private Button btnImagen;
 
     @FXML
     private TableView tblProductos;
@@ -119,7 +137,7 @@ public class ProductosController implements Initializable {
     private TextField txtMayo;
 
     @FXML
-    private TextField txtImg;
+    private ImageView txtImg;
 
     @FXML
     private TextField txtExist;
@@ -129,6 +147,9 @@ public class ProductosController implements Initializable {
 
     @FXML
     private ComboBox cbxProv;
+    
+    @FXML
+    private ImageView imgProd;
     
     @FXML MenuItem btnMenuClientes;
     @FXML MenuItem btnProgramador; 
@@ -171,18 +192,18 @@ public class ProductosController implements Initializable {
         txtPrecUn.setEditable(false);
         txtPrecDoc.setEditable(false);
         txtMayo.setEditable(false);
-        txtImg.setEditable(false);
         txtExist.setEditable(false);
         cbxTipoProd.setDisable(true);
         cbxProv.setDisable(true);
+        btnImagen.setDisable(true);
     }
 
     public void activarControles() {
         txtCod.setEditable(true);
         txtDescr.setEditable(true);
-        txtImg.setEditable(true);
         cbxTipoProd.setDisable(false);
         cbxProv.setDisable(false);
+        btnImagen.setDisable(false);
     }
 
     public void limpiarControles() {
@@ -191,10 +212,10 @@ public class ProductosController implements Initializable {
         txtPrecUn.clear();
         txtPrecDoc.clear();
         txtMayo.clear();
-        txtImg.clear();
         txtExist.clear();
         cbxTipoProd.setValue(null);
         cbxProv.setValue(null);
+        imgProd.setImage(null);
     }
     
     public ObservableList<Productos> getProductos() {
@@ -210,7 +231,7 @@ public class ProductosController implements Initializable {
                                                         resultado.getDouble("precioUnitario"),
                                                         resultado.getDouble("precioDocena"),
                                                         resultado.getDouble("precioMayor"),
-                                                        resultado.getString("imagenProducto"),
+                                                        resultado.getBlob("imagenProducto"),
                                                         resultado.getInt("existencia"), 
                                                         resultado.getInt("tipoProducto"),
                                                         resultado.getInt("proveedor")));
@@ -301,17 +322,30 @@ public class ProductosController implements Initializable {
     
     public void guardarProductos(){
         Productos registro = new Productos();
+        
+        if (archivoSeleccionado
+                != null) {
+            try {
+                byte[] imageBytes = leerArchivo(archivoSeleccionado
+                );
+                registro.setImagenProducto(new SerialBlob(imageBytes));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            registro.setImagenProducto(null);
+        }
+
         registro.setCodigoProducto(txtCod.getText());
         registro.setProveedor(((Proveedores) cbxProv.getSelectionModel().getSelectedItem()).getCodigoProveedor());
         registro.setTipoProducto(((TipoProducto) cbxTipoProd.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
         registro.setDescripcionProducto(txtDescr.getText());
-        registro.setImagenProducto(txtImg.getText());
         
         try{
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_agregarProductos(?,?,?,?,?)}");
             procedimiento.setString(1, registro.getCodigoProducto());
             procedimiento.setString(2, registro.getDescripcionProducto());
-            procedimiento.setString(3, registro.getImagenProducto());
+            procedimiento.setBlob(3, registro.getImagenProducto());
             procedimiento.setInt(4, registro.getTipoProducto());
             procedimiento.setInt(5, registro.getProveedor());
             
@@ -324,15 +358,28 @@ public class ProductosController implements Initializable {
     public void seleccionarTupla() {
         int codProv = ((Productos) tblProductos.getSelectionModel().getSelectedItem()).getProveedor();
         
+        
         txtCod.setText(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getCodigoProducto());
         txtDescr.setText(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getDescripcionProducto());
         txtPrecUn.setText(String.valueOf(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getPrecioUnitario()));
         txtPrecDoc.setText(String.valueOf(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getPrecioDocena()));
         txtMayo.setText(String.valueOf(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getPrecioMayor()));
-        txtImg.setText(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getImagenProducto());
         txtExist.setText(String.valueOf(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getExistencia()));
         cbxTipoProd.getSelectionModel().select(buscarTipoProducto(((Productos) tblProductos.getSelectionModel().getSelectedItem()).getTipoProducto()));
         cbxProv.getSelectionModel().select(buscarProveedor(codProv));
+        
+        if (((Productos) tblProductos.getSelectionModel().getSelectedItem()).getImagenProducto() != null) {
+                Blob imagenBlob = ((Productos) tblProductos.getSelectionModel().getSelectedItem()).getImagenProducto();
+                byte[] imagenBytes;
+            try {
+                imagenBytes = imagenBlob.getBytes(1, (int) imagenBlob.length());
+                Image image = byteArrayToImage(imagenBytes);
+                imgProd.setImage(image);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+                
+        }
     }
     
     public TipoProducto buscarTipoProducto(int codTipoProd){
@@ -460,20 +507,33 @@ public class ProductosController implements Initializable {
     
     public void actualizar(){
         Productos registro = (Productos)tblProductos.getSelectionModel().getSelectedItem();
+        
+        
+        
         registro.setProveedor(((Proveedores) cbxProv.getSelectionModel().getSelectedItem()).getCodigoProveedor());
         registro.setTipoProducto(((TipoProducto) cbxTipoProd.getSelectionModel().getSelectedItem()).getCodigoTipoProducto());
         registro.setDescripcionProducto(txtDescr.getText());
         registro.setPrecioUnitario(Double.parseDouble(txtPrecUn.getText()));
         registro.setPrecioDocena(Double.parseDouble(txtPrecDoc.getText()));
         registro.setPrecioMayor(Double.parseDouble(txtMayo.getText()));
-        registro.setImagenProducto(txtImg.getText());
         registro.setExistencia(Integer.parseInt(txtExist.getText()));
+        
+        
+        if (archivoSeleccionado != null) {
+            try{
+                byte[] imageBytes = leerArchivo(archivoSeleccionado);
+                Blob imagenBlob = new SerialBlob(imageBytes);
+                registro.setImagenProducto(imagenBlob);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
         
         try{
             PreparedStatement procedimiento = Conexion.getInstance().getConexion().prepareCall("{call sp_actualizarProductos(?,?,?,?,?)}");
             procedimiento.setString(1, registro.getCodigoProducto());
             procedimiento.setString(2, registro.getDescripcionProducto());
-            procedimiento.setString(3, registro.getImagenProducto());
+            procedimiento.setBlob(3, registro.getImagenProducto());
             procedimiento.setInt(4, registro.getTipoProducto());
             procedimiento.setInt(5, registro.getProveedor());
             procedimiento.execute();
@@ -544,4 +604,42 @@ public class ProductosController implements Initializable {
             escenarioPrincipal.DetalleFacturaView();
         }
     }
+    
+    public void abrirImagen(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+        }
+    }
+
+    public void seleccionarImagen() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        
+        archivoSeleccionado= fileChooser.showOpenDialog(new Stage());
+        
+        if (archivoSeleccionado!= null) {
+            Image image = new Image(archivoSeleccionado.toURI().toString());
+            imgProd.setImage(image);
+        }
+    }
+
+    private byte[] leerArchivo(File file) throws IOException {
+        try (FileInputStream fis = new FileInputStream(file); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesRead);
+            }
+            return baos.toByteArray();
+        }
+    }
+    
+    private Image byteArrayToImage(byte[] imagenBytes) {
+        ByteArrayInputStream bais = new ByteArrayInputStream(imagenBytes);
+        
+        return new Image(bais);
+    }
+    
 }

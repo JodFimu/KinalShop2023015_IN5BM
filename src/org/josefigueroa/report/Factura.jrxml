@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Factura" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="93f1d66d-78db-491a-b4eb-47cc03f43e93">
 	<property name="ireport.zoom" value="1.3636363636363653"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="96"/>
 	<subDataset name="New Dataset 1" uuid="b88382bd-efde-4acf-9e0d-c59ad72b7802">
 		<queryString language="SQL">
 			<![CDATA[select * from DetalleFactura
@@ -30,13 +30,15 @@ where Factura.numeroFactura=DetalleFactura.numeroFactura;]]>
 			<groupExpression><![CDATA[$F{precioUnitario}]]></groupExpression>
 		</group>
 	</subDataset>
-	<parameter name="IDFact" class="java.lang.Integer"/>
+	<parameter name="IDFact" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select * from DetalleFactura
 inner join Factura on Factura.numeroFactura = DetalleFactura.numeroFactura
 inner join Clientes on Clientes.codigoCliente = Factura.codigoCliente
 inner join Productos on Productos.codigoProducto = DetalleFactura.codigoProducto
-where Factura.numeroFactura=DetalleFactura.numeroFactura;]]>
+where DetalleFactura.numeroFactura=$P{IDFact};]]>
 	</queryString>
 	<field name="codigoDetalleFactura" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -95,7 +97,7 @@ where Factura.numeroFactura=DetalleFactura.numeroFactura;]]>
 	<field name="precioMayor" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="imagenProducto" class="java.lang.String">
+	<field name="imagenProducto" class="java.lang.Object">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="existencia" class="java.lang.Integer">
@@ -108,13 +110,13 @@ where Factura.numeroFactura=DetalleFactura.numeroFactura;]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="SumFact" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{totalFactura}/1.12]]></variableExpression>
+		<variableExpression><![CDATA[($F{precioUnitario})*$F{cantidad}]]></variableExpression>
 	</variable>
 	<variable name="IVA" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{totalFactura}*0.12]]></variableExpression>
+		<variableExpression><![CDATA[($F{precioUnitario}*0.12)*$F{cantidad}]]></variableExpression>
 	</variable>
 	<variable name="Total" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[($F{totalFactura}/1.12)+($F{totalFactura}*0.12)]]></variableExpression>
+		<variableExpression><![CDATA[(($F{precioUnitario})*$F{cantidad})+(($F{precioUnitario}*0.12)*$F{cantidad})]]></variableExpression>
 	</variable>
 	<background>
 		<band height="802">
@@ -161,7 +163,7 @@ where Factura.numeroFactura=DetalleFactura.numeroFactura;]]>
 				<textFieldExpression><![CDATA["Estado: "+$F{estado}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="35" width="100" height="20" uuid="44aa15e9-e334-4426-b372-a06e0f84aecc"/>
+				<reportElement x="203" y="35" width="100" height="20" uuid="44aa15e9-e334-4426-b372-a06e0f84aecc"/>
 				<textFieldExpression><![CDATA["Cliente:"]]></textFieldExpression>
 			</textField>
 			<textField>

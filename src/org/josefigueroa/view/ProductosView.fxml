@@ -143,7 +143,6 @@
          <children>
             <TextField fx:id="txtPrecDoc" prefHeight="87.0" prefWidth="100.0" GridPane.columnIndex="1" />
             <TextField fx:id="txtMayo" prefHeight="87.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="txtImg" prefHeight="87.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Precio por Docena">
                <font>
                   <Font size="18.0" />
@@ -152,10 +151,11 @@
                <font>
                   <Font size="18.0" />
                </font></Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" GridPane.rowIndex="2">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Existencias" GridPane.rowIndex="2">
                <font>
                   <Font size="18.0" />
                </font></Text>
+            <TextField fx:id="txtExist" prefHeight="57.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
       <GridPane layoutX="774.0" layoutY="137.0" prefHeight="90.0" prefWidth="278.0">
@@ -169,21 +169,30 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Existencias">
-               <font>
-                  <Font size="18.0" />
-               </font></Text>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de Producto" GridPane.rowIndex="1">
                <font>
                   <Font size="18.0" />
                </font></Text>
-            <TextField fx:id="txtExist" prefHeight="57.0" prefWidth="100.0" GridPane.columnIndex="1" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Proveedor" GridPane.rowIndex="2">
                <font>
                   <Font size="18.0" />
                </font></Text>
             <ComboBox fx:id="cbxTipoProd" prefHeight="31.0" prefWidth="141.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <ComboBox fx:id="cbxProv" prefHeight="31.0" prefWidth="141.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Button fx:id="btnImagen" mnemonicParsing="false" onAction="#seleccionarImagen" prefHeight="31.0" prefWidth="145.0" GridPane.columnIndex="1">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/archivos.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </GridPane>
       <MenuBar prefHeight="32.0" prefWidth="1066.0" styleClass="menubar" stylesheets="@../resource/KinalShopCSS.css">
@@ -225,5 +234,6 @@
             </Menu>
          </menus>
       </MenuBar>
+      <ImageView fx:id="imgProd" fitHeight="90.0" fitWidth="139.0" layoutX="913.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>
