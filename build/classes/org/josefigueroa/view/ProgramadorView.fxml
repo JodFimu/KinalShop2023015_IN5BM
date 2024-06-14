@@ -14,7 +14,7 @@
       <TextField editable="false" layoutX="21.0" layoutY="497.0" prefHeight="31.0" prefWidth="212.0" style="-fx-background-color: FDE767;" text="José David Figueroa Muñoz" />
       <TextField editable="false" layoutX="21.0" layoutY="536.0" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: FDE767;" text="Carné: 2023015" />
       <TextField editable="false" layoutX="21.0" layoutY="574.0" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: FDE767;" text="IN5BM" />
-      <MenuBar layoutY="-2.0" prefHeight="32.0" prefWidth="1011.0" styleClass="menubar" stylesheets="@../resource/KinalShopCSS.css">
+      <MenuBar layoutY="-2.0" prefHeight="32.0" prefWidth="862.0" styleClass="menubar" stylesheets="@../resource/KinalShopCSS.css">
          <menus>
             <Menu mnemonicParsing="false" text="Clientes">
                <items>
@@ -62,5 +62,23 @@
             <Image url="@../images/imgAyuda.png" />
          </image>
       </ImageView>
+      <Button fx:id="btnCerrar" layoutX="965.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="31.0" prefWidth="35.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css">
+         <graphic>
+            <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/cerrar.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btnMin" layoutX="919.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="31.0" prefWidth="35.0" styleClass="Button" stylesheets="@../resource/KinalShopCSS.css">
+         <graphic>
+            <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/minimizar.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>
